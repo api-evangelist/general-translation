@@ -1,0 +1,32 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/general-translation-openapi-original.yml
+docs: https://generaltranslation.com/en-US/docs/api
+summary:
+  types:
+  - http
+  api_key_prefixes:
+    development: gtx-dev-
+    production: gtx-api-
+    organization: gtx-org-
+schemes:
+- name: Bearer
+  type: http
+  scheme: bearer
+  description: 'API key sent as a bearer token in the standard `Authorization: Bearer <key>`
+    header. Use a project key (`gtx-api-`, `gtx-dev-`) or an organization key (`gtx-org-`).
+    Organization keys must also send `gt-project-id` on project-scoped routes.'
+  alt_header: x-gt-api-key
+  alt_header_note: >
+    The public API reference also documents sending the same key in an
+    `x-gt-api-key` header instead of the Authorization bearer header.
+  key_permissions:
+    - project:files:read
+    - project:files:write
+    - project:translations:enqueue
+    - project:translations:generate
+    - project:context:read
+    - project:context:write
+    - project:write
+  sources:
+  - openapi/general-translation-openapi-original.yml
