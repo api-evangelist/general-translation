@@ -1,0 +1,26 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs/api
+modes:
+  - name: development
+    key_prefix: gtx-dev-
+    description: >
+      Development / dev API keys for local and preview use. Enable runtime
+      translation of new/unseen content on the fly during development. Rejected
+      by production-only endpoints.
+  - name: production
+    key_prefix: gtx-api-
+    description: >
+      Production project key, bound to a single project. Serves pre-generated
+      translations from production infrastructure.
+  - name: organization
+    key_prefix: gtx-org-
+    description: >
+      Organization key that works across projects; must send the gt-project-id
+      header on project-scoped routes.
+test_values:
+  note: >
+    General Translation publishes no magic/test identifiers or fixture values.
+    Development keys (gtx-dev-) are the sandbox mechanism; obtain them from the
+    dashboard (https://dash.generaltranslation.com). No test values are invented here.
+dashboard: https://dash.generaltranslation.com

@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/general-translation-openapi-original.yml (gt-api-version enum) + https://generaltranslation.com/en-US/docs/api
+scheme: date-based-api-versions
+current: '2026-03-06.v1'
+selector:
+  header: gt-api-version
+  note: >
+    General Translation versions the API by date via the gt-api-version request
+    header rather than a dated prose changelog page. The supported version
+    identifiers below are the API's release train; each is selectable and older
+    versions remain callable.
+entries:
+  - version: '2026-03-06.v1'
+    date: '2026-03-06'
+    current: true
+  - version: '2026-02-18.v1'
+    date: '2026-02-18'
+  - version: '2025-11-03.v1'
+    date: '2025-11-03'
+  - version: '2025-01-01.v0'
+    date: '2025-01-01'
+    note: Initial v0 API version.

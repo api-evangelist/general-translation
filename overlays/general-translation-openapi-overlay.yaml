@@ -1,0 +1,32 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for General Translation API
+  version: 1.0.0
+extends: openapi/general-translation-openapi-original.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-07-19'
+      x-apievangelist-provider: general-translation
+      x-apievangelist-categories:
+        - Internationalization
+        - Localization
+        - Translation
+        - Developer Tools
+        - AI
+  - target: $.info
+    update:
+      x-agent-readiness:
+        webhooks: true
+        auth: bearer-token
+        error-envelope: json
+        versioning: date-header
+  - target: $.components.securitySchemes.Bearer
+    update:
+      x-docs: https://generaltranslation.com/en-US/docs/api
+      x-alt-header: x-gt-api-key
+      x-note: >
+        The OpenAPI declares HTTP Bearer (Authorization: Bearer <key>). The public
+        API reference docs also document sending the same key in an x-gt-api-key
+        header. Key prefixes: gtx-dev- (development), gtx-api- (production project),
+        gtx-org- (organization, requires gt-project-id).

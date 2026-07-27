@@ -1,0 +1,362 @@
+# General Translation
+
+> General Translation is an end-to-end internationalization platform for developers. It combines open-source i18n libraries, AI-powered translation, and an automated coding agent in one workflow from source code to production.
+
+- Provide open-source SDKs for React, Next.js, and React Native, including `gt-next` and `gt-react`.
+- Translate application content using codebase context, including component structure, variable names, surrounding UI, and product glossary.
+- Automate internationalization with Locadex, an AI agent that scans repositories, updates source code, generates translations, and opens pull requests.
+- Deliver pre-generated translations through production-ready infrastructure.
+
+- **End-to-end localization:** General Translation connects the i18n library, translation platform, and developer workflow instead of requiring separate tools for each step.
+- **Code as the source of truth:** Translatable content lives in the application code, reducing the need to manually extract strings, manage JSON files, or sync translation files with a TMS.
+- **Context-aware AI translation:** Translations are generated with awareness of the surrounding code and product context, rather than isolated strings alone.
+- **Developer-first workflow:** General Translation is designed to fit into modern development workflows, including local development, CI/CD, pull requests, and production deployment.
+
+General Translation is used by developer-first teams including Cursor, Cognition, Windsurf, Ramp, Mintlify, ClickHouse, and others.
+
+## blogs
+
+- [i18n without translation files](https://generaltranslation.com/en-US/blog/i18n-without-translation-files): Most i18n libraries force you to maintain JSON files for each language you support. There's a different way to handle it.
+- [Best localization software for developers in 2026](https://generaltranslation.com/en-US/blog/best-localization-software): Why the traditional split between i18n libraries and translation management systems is the wrong approach, and what end-to-end localization actually looks like
+- [You're Doing Next.js i18n Wrong](https://generaltranslation.com/en-US/blog/nextjs-i18n-code-is-the-source-of-truth): Translation keys separate content from where it's used. Here's the case for keeping them together.
+- [How to Optimize SEO for a Multilingual Next.js App](https://generaltranslation.com/en-US/blog/multilingual-nextjs-seo): A practical guide to multilingual SEO in Next.js — locale routing, HTML lang tags, canonical URLs, hreflang, sitemaps, and metadata, all implemented with gt-next
+- [Translating JSX - How to use Conditionals](https://generaltranslation.com/en-US/blog/branch_vs_ternary): Learn how to handle translations with better context and flexibility
+- [How to Internationalize an AI chatbot](https://generaltranslation.com/en-US/blog/ai-chatbot): Build and deploy a fully translated AI chatbot in minutes using gt-next
+- [How to Handle Pluralization in React](https://generaltranslation.com/en-US/blog/plurals): How to handle plural forms in React and Next.js — from simple English plurals to full multilingual i18n support with examples
+- [Launching gt-next](https://generaltranslation.com/en-US/blog/gt-next): The easiest way to internationalize your Next.js app
+
+## cli
+
+- [Quickstart](en-US/docs/cli/quickstart.mdx): Learn what the General Translation CLI does, when to use it, and how to translate your first project.
+- [Tracking translations by branch](en-US/docs/cli/guides/branching.mdx): How to track translations separately per git branch with General Translation while you work on features.
+- [Configuring the CLI](en-US/docs/cli/guides/configuring.mdx): How to set up a General Translation gt.config.json: this guide covers configuring your locales, files, and storage options.
+- [Generating translations](en-US/docs/cli/guides/generating-translations.mdx): How to translate your project with the General Translation CLI: this guide covers generating translations and saving them to your codebase or the CDN.
+- [Managing translations](en-US/docs/cli/guides/managing-translations.mdx): How to manage translations with the General Translation CLI: this guide covers splitting the workflow into upload, enqueue, and download stages, staging translations for review, and syncing local edits.
+- [Using automatic JSX injection](en-US/docs/cli/guides/using-auto-jsx.mdx): How to wrap translatable JSX text in General Translation components at build time with automatic JSX injection.
+- [Using auto-derived translations](en-US/docs/cli/guides/using-autoderive.mdx): How to automatically generate a separate translation entry for each interpolated value with Autoderive in the General Translation CLI.
+- [Configuration](en-US/docs/cli/reference/config.mdx): Configure the General Translation CLI with the gt.config.json file. API reference for gt.config.json.
+- [Keyed metadata](en-US/docs/cli/reference/keyed-metadata.mdx): Attach per-key translation instructions to General Translation JSON and YAML files. API reference for keyed metadata.
+- [gt auth](en-US/docs/cli/reference/commands/auth.mdx): Generate General Translation API credentials for a project. API reference for the gt auth command.
+- [gt configure](en-US/docs/cli/reference/commands/configure.mdx): Create a General Translation gt.config.json file. API reference for the gt configure command.
+- [gt download](en-US/docs/cli/reference/commands/download.mdx): Download completed translations from General Translation. API reference for the gt download command.
+- [gt enqueue](en-US/docs/cli/reference/commands/enqueue.mdx): Queue uploaded files for General Translation without downloading results. API reference for the gt enqueue command.
+- [gt generate](en-US/docs/cli/reference/commands/generate.mdx): Generate a source template for a General Translation project. API reference for the gt generate command.
+- [gt init](en-US/docs/cli/reference/commands/init.mdx): Run the General Translation setup wizard to configure a project. API reference for the gt init command.
+- [gt save-local](en-US/docs/cli/reference/commands/save-local.mdx): Sync local translation edits back to the General Translation platform. API reference for the gt save-local command.
+- [gt setup](en-US/docs/cli/reference/commands/setup.mdx): Upload source files and register a project for General Translation. API reference for the gt setup command.
+- [gt stage](en-US/docs/cli/reference/commands/stage.mdx): Submit a project for General Translation with human review required. API reference for the gt stage command.
+- [gt translate](en-US/docs/cli/reference/commands/translate.mdx): Translate a project through the General Translation API. API reference for the gt translate command.
+- [gt upload](en-US/docs/cli/reference/commands/upload.mdx): Upload source files and translations to the General Translation platform. API reference for the gt upload command.
+- [gt validate](en-US/docs/cli/reference/commands/validate.mdx): Check a General Translation project for translation errors without calling the API. API reference for the gt validate command.
+- [GT](en-US/docs/cli/reference/formats/gt-jsx-files.mdx): Translate gt-next, gt-react, and gt-react-native projects with General Translation. API reference for the gt file format.
+- [HTML](en-US/docs/cli/reference/formats/html-files.mdx): Translate HTML files with the General Translation CLI. API reference for the HTML file format.
+- [JSON](en-US/docs/cli/reference/formats/json-files.mdx): Translate JSON files with the General Translation CLI. API reference for the JSON file format.
+- [MDX and Markdown](en-US/docs/cli/reference/formats/mdx-md-files.mdx): Translate MDX and Markdown files with the General Translation CLI. API reference for the MDX and Markdown file formats.
+- [Plain text](en-US/docs/cli/reference/formats/plain-text-files.mdx): Translate plain text files with the General Translation CLI. API reference for the plain text file format.
+- [PO / POT](en-US/docs/cli/reference/formats/po-pot-files.mdx): Translate PO and POT gettext files with the General Translation CLI. API reference for the PO and POT file format.
+- [TypeScript and JavaScript](en-US/docs/cli/reference/formats/ts-js-files.mdx): Translate TypeScript and JavaScript files with the General Translation CLI. API reference for the TypeScript and JavaScript file formats.
+- [YAML](en-US/docs/cli/reference/formats/yaml-files.mdx): Translate YAML files with the General Translation CLI. API reference for the YAML file format.
+
+## integrations
+
+- [Integrations](en-US/docs/integrations.mdx): Use General Translation with third-party content platforms and plugins.
+- [Quickstart](en-US/docs/integrations/mintlify/quickstart.mdx): Quickstart to translate a Mintlify documentation site with General Translation.
+- [Quickstart](en-US/docs/integrations/sanity/quickstart.mdx): Install gt-sanity, add the General Translation plugin to Sanity Studio, and translate your first document.
+- [Quickstart](en-US/docs/integrations/storyblok/quickstart.mdx): Quickstart to connect a Storyblok space to General Translation and translate your first story from the Dashboard.
+- [Configuring Mintlify](en-US/docs/integrations/mintlify/guides/configuring-mintlify.mdx): How to connect a Mintlify documentation repository to General Translation: this guide covers choosing languages and setting how translations run.
+- [Managing translations](en-US/docs/integrations/mintlify/guides/managing-translations.mdx): How to add or remove languages, keep Mintlify translations current, and edit generated translations with General Translation.
+- [Translating content](en-US/docs/integrations/mintlify/guides/translating-content.mdx): How to translate your Mintlify documentation with General Translation: this guide covers what Locadex translates and preserves.
+- [Using translated content](en-US/docs/integrations/mintlify/guides/using-translated-content.mdx): How does General Translation set up multi-language navigation, routing, and redirects in your Mintlify docs?
+- [Configuration](en-US/docs/integrations/mintlify/reference/config.mdx): Reference for the gt.config.json General Translation generates for a Mintlify project. Reference for the Mintlify integration configuration.
+- [Locales](en-US/docs/integrations/mintlify/reference/locales.mdx): Reference for the language codes Mintlify supports and how General Translation locales map onto them. Reference for Mintlify locale handling.
+- [Supported content](en-US/docs/integrations/mintlify/reference/supported-content.mdx): Reference for the files and content General Translation translates in a Mintlify project. Reference for Mintlify supported content.
+- [Configuring Sanity](en-US/docs/integrations/sanity/guides/configuring-sanity.mdx): How to configure the General Translation gt-sanity plugin: this guide covers locales, document filters, field-level localization, credentials, language fields, and singletons.
+- [Managing translations](en-US/docs/integrations/sanity/guides/managing-translations.mdx): How to manage General Translation Sanity translations: this guide covers imports, reference patching, bulk publishing, and field behavior.
+- [Querying translations](en-US/docs/integrations/sanity/guides/querying-translations.mdx): How to query translated Sanity documents with GROQ using the General Translation document-level localization model.
+- [Translating content](en-US/docs/integrations/sanity/guides/translating-content.mdx): How to translate Sanity documents with General Translation from the document action, the tab view, or the Translations page.
+- [Sanity plugin configuration](en-US/docs/integrations/sanity/reference/plugin-configuration.mdx): Configure the General Translation gt-sanity plugin for Sanity Studio. API reference for gtPlugin.
+- [Configuring Storyblok](en-US/docs/integrations/storyblok/guides/configuring-storyblok.mdx): How to connect a Storyblok space to General Translation: this guide covers adding credentials and enabling translatable fields.
+- [Managing translations](en-US/docs/integrations/storyblok/guides/managing-translations.mdx): How to re-sync Storyblok stories with General Translation: this guide covers reusing existing translations and reviewing draft-only writes.
+- [Translating content](en-US/docs/integrations/storyblok/guides/translating-content.mdx): How to translate Storyblok stories from the General Translation Dashboard and review the results summary.
+- [Using translated content](en-US/docs/integrations/storyblok/guides/using-translated-content.mdx): How does General Translation store Storyblok translations per language, and how do you fetch them from the delivery API?
+- [Connection settings](en-US/docs/integrations/storyblok/reference/connection.mdx): Reference for the settings used to connect a Storyblok space to General Translation. API reference for the Storyblok connection settings.
+- [Locales](en-US/docs/integrations/storyblok/reference/locales.mdx): Reference for how Storyblok space languages map to General Translation locales. API reference for Storyblok locale handling.
+- [Supported content](en-US/docs/integrations/storyblok/reference/supported-content.mdx): Reference for the Storyblok field types General Translation translates and how content is serialized. API reference for Storyblok supported content.
+
+## node
+
+- [Quickstart](en-US/docs/node/quickstart.mdx): Install the General Translation gt-node library and translate your first Node.js service.
+- [Configuring gt-node](en-US/docs/node/guides/configuring.mdx): How to initialize General Translation gt-node: this guide covers locales, credentials, and translation delivery.
+- [Detecting the request locale](en-US/docs/node/guides/detecting-locale.mdx): How to resolve and bind a locale for each request with General Translation in gt-node.
+- [Storing translations locally](en-US/docs/node/guides/storing-translations.mdx): How to load General Translation translations from local files instead of the CDN in gt-node.
+- [Translating strings](en-US/docs/node/guides/translating-strings.mdx): How to translate handler strings, registered messages, and dynamic content with General Translation in gt-node.
+- [Configuration](en-US/docs/node/reference/config.mdx): Configure the General Translation gt-node library with initializeGT. API reference for gt-node configuration.
+- [declareVar](en-US/docs/node/reference/functions/declare-var.mdx): Mark a value as non-derivable within a General Translation derive call. API reference for declareVar.
+- [decodeMsg](en-US/docs/node/reference/functions/decode-msg.mdx): Recover the original message string from a General Translation encoded message. API reference for decodeMsg.
+- [decodeOptions](en-US/docs/node/reference/functions/decode-options.mdx): Recover the encoded options from a General Translation encoded message. API reference for decodeOptions.
+- [decodeVars](en-US/docs/node/reference/functions/decode-vars.mdx): Interpolate General Translation declareVar variables back into a string. API reference for decodeVars.
+- [derive](en-US/docs/node/reference/functions/derive.mdx): Mark computed content as derivable for General Translation extraction. API reference for derive.
+- [getDefaultLocale](en-US/docs/node/reference/functions/get-default-locale.mdx): Read the configured source locale in General Translation gt-node. API reference for getDefaultLocale.
+- [getGT](en-US/docs/node/reference/functions/get-gt.mdx): Get a General Translation function for the current request locale to translate inline strings. API reference for getGT.
+- [getLocaleProperties](en-US/docs/node/reference/functions/get-locale-properties.mdx): Read display metadata for a locale in General Translation gt-node. API reference for getLocaleProperties.
+- [getLocale](en-US/docs/node/reference/functions/get-locale.mdx): Read the active locale for the current request in General Translation gt-node. API reference for getLocale.
+- [getLocales](en-US/docs/node/reference/functions/get-locales.mdx): List the supported locales configured in General Translation gt-node. API reference for getLocales.
+- [getMessages](en-US/docs/node/reference/functions/get-messages.mdx): Get a General Translation resolver for messages registered with msg for the current request locale. API reference for getMessages.
+- [getRequestLocale](en-US/docs/node/reference/functions/get-request-locale.mdx): Detect the best supported locale from a request's Accept-Language header with General Translation. API reference for getRequestLocale.
+- [getTranslations](en-US/docs/node/reference/functions/get-translations.mdx): Get a General Translation dictionary resolver for the current request locale. API reference for getTranslations.
+- [getVersionId](en-US/docs/node/reference/functions/get-version-id.mdx): Read the configured translation version ID in General Translation gt-node. API reference for getVersionId.
+- [initializeGT](en-US/docs/node/reference/functions/initialize-gt.mdx): Configure the General Translation gt-node library once at server startup. API reference for initializeGT.
+- [msg](en-US/docs/node/reference/functions/msg.mdx): Mark and encode a string at module scope for translation with General Translation. API reference for msg.
+- [tx](en-US/docs/node/reference/functions/tx.mdx): Translate a string on demand at runtime with General Translation. API reference for tx.
+- [withGT](en-US/docs/node/reference/functions/with-gt.mdx): Bind a locale for the duration of a request so General Translation functions resolve against it. API reference for withGT.
+
+## platform
+
+- [Platform](en-US/docs/platform.mdx): Browse docs for the General Translation Platform, including the Dashboard, Locadex, Core library, and OpenAPI.
+- [Quickstart](en-US/docs/platform/core/quickstart.mdx): Learn what the `generaltranslation` Core library does, when to use it, and how to translate your first string.
+- [Get started with the Dashboard](en-US/docs/platform/dashboard/get-started.mdx): Learn how the Dashboard is organized and where to find common translation workflows.
+- [Quickstart](en-US/docs/platform/locadex/quickstart.mdx): Learn how to use Locadex, the AI agent which connects your codebase, translations, and content sources. It’s the fastest way to run General Translation's full-stack localization.
+- [Overview](en-US/docs/platform/openapi/overview.mdx): Learn how to use the public General Translation API endpoints and the OpenAPI spec.
+- [Understanding locale codes](en-US/docs/platform/core/guides/locale-codes.mdx): What are locale codes, and how are they used in the General Translation stack?
+- [Translating files](en-US/docs/platform/core/guides/translating-files.mdx): How to translate files with the generaltranslation library: this guide covers uploading a source file, enqueuing translation, checking status, and downloading the translated file.
+- [Translating strings](en-US/docs/platform/core/guides/translating-strings.mdx): How to translate strings, batches of strings, and structured content directly from code with the generaltranslation library.
+- [Adding annotations](en-US/docs/platform/dashboard/guides/adding-annotations.mdx): How to use labels, notes, and comments to coordinate translation review by entry and locale in the General Translation Dashboard.
+- [Adding translation context](en-US/docs/platform/dashboard/guides/adding-translation-context.mdx): How to use Context Groups with Glossary (key terms) and Directives (tone and style) to guide AI translation in the General Translation Dashboard.
+- [Managing billing](en-US/docs/platform/dashboard/guides/managing-billing.mdx): How to manage billing in General Translation: this guide covers plans, usage-based pricing, prepaid credits, and auto-reload in the Dashboard.
+- [Reviewing and editing translations](en-US/docs/platform/dashboard/guides/reviewing-translations.mdx): How to review and edit translations in the General Translation Dashboard: this guide covers manual edits, comparing locales, and inspecting version history.
+- [API keys](en-US/docs/platform/dashboard/reference/api-keys.mdx): Create and manage Project and Organization API keys for apps, local development, and automation.
+- [API reference](en-US/docs/platform/dashboard/reference/api-reference.mdx): Find the public General Translation API endpoints, authentication details, and OpenAPI spec.
+- [Organization settings](en-US/docs/platform/dashboard/reference/organization-settings.mdx): Manage Organization members, roles, invitations, and default settings.
+- [Project settings](en-US/docs/platform/dashboard/reference/project-settings.mdx): Project settings control how an individual Project appears and how its translations are delivered.
+- [Roles and permissions](en-US/docs/platform/dashboard/reference/roles-and-permissions.mdx): Understand the default Organization roles, permission categories, and how permissions inherit across Enterprises, Organizations, and Projects.
+- [Supported locales](en-US/docs/platform/dashboard/reference/supported-locales.mdx): Search the locales supported by the General Translation platform.
+- [Webhooks](en-US/docs/platform/dashboard/reference/webhooks.mdx): Configure webhook endpoints, verify signatures, and handle translation events from General Translation.
+- [Adding environment variables](en-US/docs/platform/locadex/guides/adding-environment-variables.mdx): How to add key-value environment variables that Locadex injects into the sandbox when workflows run.
+- [Auto-merging Locadex PRs](en-US/docs/platform/locadex/guides/auto-merging-prs.mdx): How to configure Locadex to merge pull requests automatically when checks pass.
+- [Configuring Locadex workflows](en-US/docs/platform/locadex/guides/configuring-workflows.mdx): How to configure when Locadex runs codegen, translation, and locale update workflows.
+- [Managing languages](en-US/docs/platform/locadex/guides/managing-languages.mdx): How to choose the source locale and target languages Locadex uses for translation workflows.
+- [Using Locadex in a monorepo](en-US/docs/platform/locadex/guides/using-in-monorepos.mdx): How to use Locadex within a monorepo: this guide covers configuring the app root directory and commands.
+- [Viewing workflow history](en-US/docs/platform/locadex/guides/viewing-workflow-history.mdx): How to view recent and past Locadex workflow runs from the Agent and History pages.
+- [Agent page](en-US/docs/platform/locadex/reference/agent.mdx): Reference for the Locadex Agent page, repository status, languages, and recent workflow runs.
+- [Configuration](en-US/docs/platform/locadex/reference/config.mdx): Reference for Locadex general settings, workflows, languages, secrets, and danger zone actions.
+- [VM image](en-US/docs/platform/locadex/reference/vm-image.mdx): Reference for the sandbox environment Locadex uses to run workflows.
+- [Constructor](en-US/docs/platform/core/reference/gt-class/constructor.mdx): Initialize a GT instance with API keys, Project settings, default locales, and locale mappings. API reference for Constructor.
+- [setConfig](en-US/docs/platform/core/reference/gt-class/set-config.mdx): Update configuration on an existing GT instance. API reference for setConfig.
+- [Content](en-US/docs/platform/core/reference/types/content.mdx): Supported content formats for translation. API reference for Content type.
+- [CustomMapping](en-US/docs/platform/core/reference/types/custom-mapping.mdx): Custom locale mappings and locale property overrides. API reference for CustomMapping type.
+- [DataFormat](en-US/docs/platform/core/reference/types/data-format.mdx): Supported translation data format values. API reference for DataFormat type.
+- [EnqueueFilesOptions](en-US/docs/platform/core/reference/types/enqueue-files-options.mdx): Options for queueing uploaded files for translation with General Translation. API reference for EnqueueFilesOptions type.
+- [EntryMetadata](en-US/docs/platform/core/reference/types/entry-metadata.mdx): Metadata for adding context to string translation entries. API reference for EntryMetadata type.
+- [FileToTranslate](en-US/docs/platform/core/reference/types/file-to-translate.mdx): File input structure for file translation workflows. API reference for FileToTranslate type.
+- [GTConstructorParams](en-US/docs/platform/core/reference/types/gt-constructor-params.mdx): Configuration options accepted by the GT constructor. API reference for GTConstructorParams type.
+- [JsxChildren](en-US/docs/platform/core/reference/types/jsx-children.mdx): JSX content structure for translatable children. API reference for JsxChildren type.
+- [JsxElement](en-US/docs/platform/core/reference/types/jsx-element.mdx): Structured JSX-like element used in translatable content. API reference for JsxElement type.
+- [LocaleProperties](en-US/docs/platform/core/reference/types/locale-properties.mdx): Language, script, region, and direction metadata for a locale. API reference for LocaleProperties type.
+- [TranslateManyEntry](en-US/docs/platform/core/reference/types/translate-many-entry.mdx): Input shape for translate and translateMany entries. API reference for TranslateManyEntry type.
+- [TranslateManyResult](en-US/docs/platform/core/reference/types/translate-many-result.mdx): Result array returned by batch translation. API reference for TranslateManyResult type.
+- [TranslationResult](en-US/docs/platform/core/reference/types/translation-result.mdx): Success or error result returned by General Translation translation methods. API reference for TranslationResult type.
+- [Variable](en-US/docs/platform/core/reference/types/variable.mdx): Placeholder for dynamic content in translatable messages. API reference for Variable type.
+- [Check context freshness](en-US/docs/platform/openapi/reference/context/check-freshness.mdx): Check whether General Translation Project context is missing, stale, or ready to refresh. API reference for Check context freshness.
+- [Get context generation status](en-US/docs/platform/openapi/reference/context/context-status.mdx): Track the status of a General Translation context generation job. API reference for Get context generation status.
+- [Generate context](en-US/docs/platform/openapi/reference/context/generate-context.mdx): Generate General Translation Project glossary terms and translation instructions from source files. API reference for Generate translation context.
+- [Download files](en-US/docs/platform/openapi/reference/files/download-many.mdx): Download multiple translated files from a General Translation Project in one request. API reference for Download files.
+- [Download file](en-US/docs/platform/openapi/reference/files/download.mdx): Download a single translated file from a General Translation Project for a locale or version. API reference for Download file.
+- [Get file information](en-US/docs/platform/openapi/reference/files/file-info.mdx): Inspect General Translation source file metadata, versions, locales, and translation state. API reference for Get file information.
+- [Move files](en-US/docs/platform/openapi/reference/files/move-files.mdx): Move or rename files in a General Translation Project. API reference for Move files.
+- [Get orphaned files](en-US/docs/platform/openapi/reference/files/orphaned-files.mdx): Find General Translation files that are no longer connected to current source files. API reference for Get orphaned files.
+- [Publish files](en-US/docs/platform/openapi/reference/files/publish-files.mdx): Mark a General Translation Project's translated files as published so they are ready for delivery. API reference for Publish files.
+- [Submit file diffs](en-US/docs/platform/openapi/reference/files/submit-diffs.mdx): Submit diffs for changed source or translated content to a General Translation Project instead of uploading full files. API reference for Submit file diffs.
+- [Get translation status](en-US/docs/platform/openapi/reference/files/translation-status.mdx): Check translation progress and availability by file and locale in a General Translation Project. API reference for Get translation status.
+- [Upload source files](en-US/docs/platform/openapi/reference/files/upload-source.mdx): Upload one or more source files to a General Translation Project before queuing translation. API reference for Upload source files.
+- [Upload translations](en-US/docs/platform/openapi/reference/files/upload-translations.mdx): Upload translated files to a General Translation Project that match previously uploaded source files. API reference for Upload translations.
+- [Get branch info](en-US/docs/platform/openapi/reference/project/branch-info.mdx): Inspect branch metadata and General Translation Project branch state. API reference for Get branch information.
+- [Create a branch](en-US/docs/platform/openapi/reference/project/create-branch.mdx): Create a branch, or rename and confirm the default branch, in a General Translation Project. API reference for Create a branch.
+- [Get Project info](en-US/docs/platform/openapi/reference/project/project-info.mdx): Read General Translation Project metadata, settings, and configuration details. API reference for Get Project information.
+- [Update Project info](en-US/docs/platform/openapi/reference/project/update-project.mdx): Update General Translation Project-level settings from automation. API reference for Update Project information.
+- [Create or update tag](en-US/docs/platform/openapi/reference/project/upsert-tag.mdx): Create or update a tag on General Translation file versions for release tracking. API reference for Create or update tag.
+- [Get translation job status](en-US/docs/platform/openapi/reference/translation/job-status.mdx): Retrieve status for a queued translation job in General Translation. API reference for Get translation job status.
+- [Queue translations](en-US/docs/platform/openapi/reference/translation/queue.mdx): Queue uploaded source files for background translation in a General Translation Project. API reference for Queue translations.
+- [Translate at runtime](en-US/docs/platform/openapi/reference/translation/translate-runtime.mdx): Translate strings or structured content directly from an application or service with General Translation. API reference for Translate content at runtime.
+- [formatCurrency](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-currency.mdx): Format a currency value by locale on a GT instance. API reference for formatCurrency.
+- [formatCutoff](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-cutoff.mdx): Truncate text with locale-aware cutoff characters and terminators. API reference for formatCutoff.
+- [formatDateTime](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-date-time.mdx): Format dates and times by locale. API reference for formatDateTime.
+- [formatListToParts](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-list-to-parts.mdx): Format a list into locale-aware parts for custom rendering. API reference for formatListToParts.
+- [formatList](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-list.mdx): Format an array into a locale-aware list string on a GT instance. API reference for formatList.
+- [formatMessage](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-message.mdx): Format ICU-style messages with variables and locale-aware values. API reference for formatMessage.
+- [formatNum](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-num.mdx): Format numbers, currency, percentages, and numeric values by locale. API reference for formatNum.
+- [formatRelativeTimeFromDate](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-relative-time-from-date.mdx): Format relative time from a date compared with the current time or another date. API reference for formatRelativeTimeFromDate.
+- [formatRelativeTime](en-US/docs/platform/core/reference/gt-class-methods/formatting/format-relative-time.mdx): Format relative time values such as minutes ago or days from now. API reference for formatRelativeTime.
+- [determineLocale](en-US/docs/platform/core/reference/gt-class-methods/locales/determine-locale.mdx): Find the best matching locale from a list of approved locales. API reference for determineLocale.
+- [getLocaleDirection](en-US/docs/platform/core/reference/gt-class-methods/locales/get-locale-direction.mdx): Return the text direction for a locale. API reference for getLocaleDirection.
+- [getLocaleEmoji](en-US/docs/platform/core/reference/gt-class-methods/locales/get-locale-emoji.mdx): Return an emoji marker for a locale or region. API reference for getLocaleEmoji.
+- [getLocaleName](en-US/docs/platform/core/reference/gt-class-methods/locales/get-locale-name.mdx): Return a human-readable locale name. API reference for getLocaleName.
+- [getLocaleProperties](en-US/docs/platform/core/reference/gt-class-methods/locales/get-locale-properties.mdx): Return detailed language, script, region, and direction properties for a locale. API reference for getLocaleProperties.
+- [getRegionProperties](en-US/docs/platform/core/reference/gt-class-methods/locales/get-region-properties.mdx): Return region metadata for a locale or region code. API reference for getRegionProperties.
+- [isSameDialect](en-US/docs/platform/core/reference/gt-class-methods/locales/is-same-dialect.mdx): Check whether two locales represent the same dialect. API reference for isSameDialect.
+- [isSameLanguage](en-US/docs/platform/core/reference/gt-class-methods/locales/is-same-language.mdx): Check whether two locales share the same base language. API reference for isSameLanguage.
+- [isSupersetLocale](en-US/docs/platform/core/reference/gt-class-methods/locales/is-superset-locale.mdx): Check whether one locale can represent another more specific locale. API reference for isSupersetLocale.
+- [isValidLocale](en-US/docs/platform/core/reference/gt-class-methods/locales/is-valid-locale.mdx): Check whether a value is a valid locale code. API reference for isValidLocale.
+- [requiresTranslation](en-US/docs/platform/core/reference/gt-class-methods/locales/requires-translation.mdx): Check whether translation is needed between two locales. API reference for requiresTranslation.
+- [resolveAliasLocale](en-US/docs/platform/core/reference/gt-class-methods/locales/resolve-alias-locale.mdx): Resolve a locale alias to the locale code used by a custom mapping. API reference for resolveAliasLocale.
+- [resolveCanonicalLocale](en-US/docs/platform/core/reference/gt-class-methods/locales/resolve-canonical-locale.mdx): Resolve a locale alias to its canonical locale code on a GT instance. API reference for resolveCanonicalLocale.
+- [standardizeLocale](en-US/docs/platform/core/reference/gt-class-methods/locales/standardize-locale.mdx): Normalize a locale code into a standard format. API reference for standardizeLocale.
+- [Project and file management](en-US/docs/platform/core/reference/gt-class-methods/project/project-management.mdx): Manage a General Translation Project's info, branches, file moves, CDN publishing, and edit diffs from a GT instance. API reference for the Project and file management methods.
+- [awaitJobs](en-US/docs/platform/core/reference/gt-class-methods/translation/await-jobs.mdx): Poll queued translation jobs until they complete, fail, or time out. API reference for awaitJobs.
+- [checkJobStatus](en-US/docs/platform/core/reference/gt-class-methods/translation/check-job-status.mdx): Check the current status of a translation or setup job. API reference for checkJobStatus.
+- [createTag](en-US/docs/platform/core/reference/gt-class-methods/translation/create-tag.mdx): Create a tag for grouping or identifying file versions. API reference for createTag.
+- [downloadFileBatch](en-US/docs/platform/core/reference/gt-class-methods/translation/download-file-batch.mdx): Download multiple translated files in one request. API reference for downloadFileBatch.
+- [downloadFile](en-US/docs/platform/core/reference/gt-class-methods/translation/download-file.mdx): Download one translated file after translation is complete. API reference for downloadFile.
+- [enqueueFiles](en-US/docs/platform/core/reference/gt-class-methods/translation/enqueue-files.mdx): Queue uploaded source files for translation into one or more target locales. API reference for enqueueFiles.
+- [getProjectData](en-US/docs/platform/core/reference/gt-class-methods/translation/get-project-data.mdx): Read Project-level metadata and translation configuration. API reference for getProjectData.
+- [queryFileData](en-US/docs/platform/core/reference/gt-class-methods/translation/query-file-data.mdx): Check translation status and metadata for uploaded or translated files. API reference for queryFileData.
+- [querySourceFile](en-US/docs/platform/core/reference/gt-class-methods/translation/query-source-file.mdx): Retrieve source file metadata and related translation information. API reference for querySourceFile.
+- [setupProject](en-US/docs/platform/core/reference/gt-class-methods/translation/setup-project.mdx): Prepare uploaded files for Project translation workflows. API reference for setupProject.
+- [translateMany](en-US/docs/platform/core/reference/gt-class-methods/translation/translate-many.mdx): Translate multiple strings or structured content entries in one request. API reference for translateMany.
+- [translate](en-US/docs/platform/core/reference/gt-class-methods/translation/translate.mdx): Translate one string or structured content entry into a target locale with General Translation. API reference for translate.
+- [uploadSourceFiles](en-US/docs/platform/core/reference/gt-class-methods/translation/upload-source-files.mdx): Upload source files to a Project before queueing translation. API reference for uploadSourceFiles.
+- [uploadTranslations](en-US/docs/platform/core/reference/gt-class-methods/translation/upload-translations.mdx): Upload existing translated files that correspond to source files. API reference for uploadTranslations.
+- [formatCurrency](en-US/docs/platform/core/reference/utility-functions/formatting/format-currency.mdx): Format a currency value by locale without a GT instance. API reference for formatCurrency.
+- [formatCutoff](en-US/docs/platform/core/reference/utility-functions/formatting/format-cutoff.mdx): Truncate text with locale-aware cutoff characters without a GT instance. API reference for formatCutoff.
+- [formatDateTime](en-US/docs/platform/core/reference/utility-functions/formatting/format-date-time.mdx): Format dates and times without a GT instance. API reference for formatDateTime.
+- [formatListToParts](en-US/docs/platform/core/reference/utility-functions/formatting/format-list-to-parts.mdx): Format a list into locale-aware parts without a GT instance. API reference for formatListToParts.
+- [formatList](en-US/docs/platform/core/reference/utility-functions/formatting/format-list.mdx): Format an array into a locale-aware list string without a GT instance. API reference for formatList.
+- [formatMessage](en-US/docs/platform/core/reference/utility-functions/formatting/format-message.mdx): Format ICU-style messages without a GT instance. API reference for formatMessage.
+- [formatNum](en-US/docs/platform/core/reference/utility-functions/formatting/format-num.mdx): Format numbers, currency, percentages, and numeric values without a GT instance. API reference for formatNum.
+- [formatRelativeTimeFromDate](en-US/docs/platform/core/reference/utility-functions/formatting/format-relative-time-from-date.mdx): Format relative time from a date without a GT instance. API reference for formatRelativeTimeFromDate.
+- [formatRelativeTime](en-US/docs/platform/core/reference/utility-functions/formatting/format-relative-time.mdx): Format relative time values without a GT instance. API reference for formatRelativeTime.
+- [determineLocale](en-US/docs/platform/core/reference/utility-functions/locales/determine-locale.mdx): Find the best matching locale without a GT instance. API reference for determineLocale.
+- [getLocaleDirection](en-US/docs/platform/core/reference/utility-functions/locales/get-locale-direction.mdx): Return text direction for a locale without a GT instance. API reference for getLocaleDirection.
+- [getLocaleEmoji](en-US/docs/platform/core/reference/utility-functions/locales/get-locale-emoji.mdx): Return an emoji marker for a locale or region without a GT instance. API reference for getLocaleEmoji.
+- [getLocaleName](en-US/docs/platform/core/reference/utility-functions/locales/get-locale-name.mdx): Return a human-readable locale name without a GT instance. API reference for getLocaleName.
+- [getLocaleProperties](en-US/docs/platform/core/reference/utility-functions/locales/get-locale-properties.mdx): Return detailed locale properties without a GT instance. API reference for getLocaleProperties.
+- [getRegionProperties](en-US/docs/platform/core/reference/utility-functions/locales/get-region-properties.mdx): Return region metadata without a GT instance. API reference for getRegionProperties.
+- [isSameDialect](en-US/docs/platform/core/reference/utility-functions/locales/is-same-dialect.mdx): Check whether two locales represent the same dialect without a GT instance. API reference for isSameDialect.
+- [isSameLanguage](en-US/docs/platform/core/reference/utility-functions/locales/is-same-language.mdx): Check whether two locales share the same base language without a GT instance. API reference for isSameLanguage.
+- [isSupersetLocale](en-US/docs/platform/core/reference/utility-functions/locales/is-superset-locale.mdx): Check whether one locale can represent another more specific locale without a GT instance. API reference for isSupersetLocale.
+- [isValidLocale](en-US/docs/platform/core/reference/utility-functions/locales/is-valid-locale.mdx): Check whether a value is a valid locale code without a GT instance. API reference for isValidLocale.
+- [requiresTranslation](en-US/docs/platform/core/reference/utility-functions/locales/requires-translation.mdx): Check whether translation is needed between two locales without a GT instance. API reference for requiresTranslation.
+- [resolveAliasLocale](en-US/docs/platform/core/reference/utility-functions/locales/resolve-alias-locale.mdx): Resolve a locale alias to the locale code used by a custom mapping without a GT instance. API reference for resolveAliasLocale.
+- [resolveCanonicalLocale](en-US/docs/platform/core/reference/utility-functions/locales/resolve-canonical-locale.mdx): Resolve a locale alias to its canonical locale code without a GT instance. API reference for resolveCanonicalLocale.
+- [standardizeLocale](en-US/docs/platform/core/reference/utility-functions/locales/standardize-locale.mdx): Normalize a locale code into a standard format without a GT instance. API reference for standardizeLocale.
+
+## overview
+
+- [Using coding agents](en-US/docs/overview/for-coding-agents.mdx): How to use AI coding agents and LLMs with General Translation by pointing them at the machine-readable docs, the MCP server, and our drop-in agent guide.
+- [Introduction](en-US/docs/overview/get-started.mdx): Get started with General Translation's full stack for localization and internationalization.
+- [Key concepts](en-US/docs/overview/key-concepts.mdx): Understanding the core concepts behind General Translation: including internationalization, localization, translation, locales, and context
+
+## python
+
+- [Quickstart](en-US/docs/python/quickstart.mdx): Install the General Translation Python SDK and translate your first Flask or FastAPI app.
+- [Configuring General Translation](en-US/docs/python/guides/configuring.mdx): How to initialize General Translation in Python: this guide covers your app, locales, and translation delivery in Flask, FastAPI, or the core library.
+- [Declaring variables and variants](en-US/docs/python/guides/declaring-variables.mdx): How to preserve dynamic values and generate finite variants with General Translation declare_var, derive, and decode_vars in Python.
+- [Detecting the request locale](en-US/docs/python/guides/detecting-locale.mdx): How to resolve each request's locale automatically or with your own logic in General Translation for Python.
+- [Storing translations locally](en-US/docs/python/guides/storing-translations.mdx): How to load General Translation translations from local files instead of the CDN in Python.
+- [Translating strings](en-US/docs/python/guides/translating-strings.mdx): How to translate strings with variables, context, and options using the General Translation t and msg functions in Python.
+- [Configuration](en-US/docs/python/reference/config.mdx): Configure the General Translation Python SDK through the gt.config.json file. API reference for gt.config.json.
+- [ContextVarStorageAdapter](en-US/docs/python/reference/classes/context-var-storage-adapter.mdx): Default context-variable storage adapter for the request locale in General Translation Python. API reference for ContextVarStorageAdapter.
+- [I18nManager](en-US/docs/python/reference/classes/i18n-manager.mdx): The central orchestrator for locales, translation loading, and caching in General Translation Python. API reference for I18nManager.
+- [StorageAdapter](en-US/docs/python/reference/classes/storage-adapter.mdx): Abstract base class for per-request locale storage in General Translation Python. API reference for StorageAdapter.
+- [TranslationsLoader](en-US/docs/python/reference/classes/translations-loader.mdx): The callable type for custom translation loaders in General Translation Python. API reference for TranslationsLoader.
+- [declare_static](en-US/docs/python/reference/functions/declare-static.mdx): Deprecated alias for derive that marks content for build-time extraction in General Translation Python. API reference for declare_static.
+- [declare_var](en-US/docs/python/reference/functions/declare-var.mdx): Mark a dynamic value as a non-translatable variable in General Translation Python. API reference for declare_var.
+- [decode_msg](en-US/docs/python/reference/functions/decode-msg.mdx): Extract the human-readable message from an encoded msg result in General Translation Python. API reference for decode_msg.
+- [decode_options](en-US/docs/python/reference/functions/decode-options.mdx): Extract the options dict from an encoded msg result in General Translation Python. API reference for decode_options.
+- [decode_vars](en-US/docs/python/reference/functions/decode-vars.mdx): Replace General Translation variable markers in a string with their values in Python. API reference for decode_vars.
+- [derive](en-US/docs/python/reference/functions/derive.mdx): Mark content with a finite set of variants for build-time extraction in General Translation Python. API reference for derive.
+- [extract_variables](en-US/docs/python/reference/functions/extract-variables.mdx): Filter reserved GT keys from an options dict to get user variables in General Translation Python. API reference for extract_variables.
+- [get_default_locale](en-US/docs/python/reference/functions/get-default-locale.mdx): Read the configured source locale in General Translation Python. API reference for get_default_locale.
+- [get_i18n_manager](en-US/docs/python/reference/functions/get-i18n-manager.mdx): Access the active I18nManager in General Translation Python. API reference for get_i18n_manager.
+- [get_locale](en-US/docs/python/reference/functions/get-locale.mdx): Read the active locale for the current request in General Translation Python. API reference for get_locale.
+- [get_locales](en-US/docs/python/reference/functions/get-locales.mdx): List the supported locales configured in General Translation Python. API reference for get_locales.
+- [get_version_id](en-US/docs/python/reference/functions/get-version-id.mdx): Read the pinned translation version id in General Translation Python. API reference for get_version_id.
+- [hash_message](en-US/docs/python/reference/functions/hash-message.mdx): Hash an ICU MessageFormat string for translation lookup in General Translation Python. API reference for hash_message.
+- [initialize_gt](en-US/docs/python/reference/functions/initialize-gt.mdx): Configure the General Translation Python SDK once for a Flask or FastAPI app. API reference for initialize_gt.
+- [interpolate_message](en-US/docs/python/reference/functions/interpolate-message.mdx): Interpolate variables into an ICU MessageFormat string in General Translation Python. API reference for interpolate_message.
+- [m_fallback](en-US/docs/python/reference/functions/m-fallback.mdx): Resolve an encoded message from msg, or interpolate a plain string, in General Translation Python. API reference for m_fallback.
+- [msg](en-US/docs/python/reference/functions/msg.mdx): Register a message with its translation options as an encoded string in General Translation Python. API reference for msg.
+- [set_i18n_manager](en-US/docs/python/reference/functions/set-i18n-manager.mdx): Register the active I18nManager in General Translation Python. API reference for set_i18n_manager.
+- [t_fallback](en-US/docs/python/reference/functions/t-fallback.mdx): Interpolate a string without a translation lookup in General Translation Python. API reference for t_fallback.
+- [t](en-US/docs/python/reference/functions/t.mdx): Translate and interpolate an ICU MessageFormat string with General Translation in Python. API reference for t.
+
+## react
+
+- [Next.js Pages Router Quickstart](en-US/docs/react/nextjs-pages-router-quickstart.mdx): Add multiple languages to a Next.js Pages Router app with General Translation in under 10 minutes.
+- [Next.js App Router Quickstart](en-US/docs/react/nextjs-quickstart.mdx): Add multiple languages to a Next.js App Router app with General Translation in under 10 minutes.
+- [Overview](en-US/docs/react/overview.mdx): Learn about the General Translation React ecosystem, how its shared translation model works, and which quickstart to follow for your framework.
+- [React Native Quickstart](en-US/docs/react/react-native-quickstart.mdx): Add General Translation to a React Native app with gt-react-native, covering both Expo and the bare React Native CLI.
+- [React Quickstart](en-US/docs/react/react-quickstart.mdx): Add multiple languages to a server-rendered React app with General Translation in under 10 minutes.
+- [React SPA Quickstart](en-US/docs/react/react-spa-quickstart.mdx): Add multiple languages to a single-page React app with General Translation in under 10 minutes.
+- [TanStack Start Quickstart](en-US/docs/react/tanstack-start-quickstart.mdx): Add General Translation to a TanStack Start app with gt-tanstack-start, and translate your first content.
+- [Configuring General Translation](en-US/docs/react/guides/configuring.mdx): How to set up General Translation in React: this guide covers initialization, the provider, credentials, and translation delivery across React, Next.js, TanStack Start, and React Native.
+- [Developing with SPA translations](en-US/docs/react/guides/developing-spa-translations.mdx): How to preview General Translation translations while developing a single-page React app.
+- [Formatting numbers and dates](en-US/docs/react/guides/formatting-variables.mdx): How to insert locale-aware numbers, currencies, dates, and variables into General Translation content across React, Next.js, TanStack Start, and React Native.
+- [Handling plurals and branches](en-US/docs/react/guides/handling-plurals-and-branches.mdx): How to render count-based and conditional content with the General Translation <Plural> and <Branch> components across React, Next.js, TanStack Start, and React Native.
+- [Linting your code](en-US/docs/react/guides/linting-your-code.mdx): How to catch common internationalization mistakes with the General Translation ESLint plugin across React, Next.js, TanStack Start, and React Native.
+- [Managing locales](en-US/docs/react/guides/managing-locales.mdx): How to let users switch languages and read the active locale with General Translation across React, Next.js, TanStack Start, and React Native.
+- [Storing translations locally](en-US/docs/react/guides/storing-translations.mdx): How to bundle General Translation translations in your app instead of loading them from the CDN, across React, Next.js, TanStack Start, and React Native.
+- [Translating JSX](en-US/docs/react/guides/translating-jsx.mdx): How to translate JSX in place with the General Translation <T> component across React, Next.js, TanStack Start, and React Native.
+- [Translating strings](en-US/docs/react/guides/translating-strings.mdx): How to translate standalone strings such as labels and placeholders with the General Translation useGT hook across React, Next.js, TanStack Start, and React Native.
+- [Translating with dictionaries](en-US/docs/react/guides/translating-with-dictionaries.mdx): How to translate strings from a central dictionary with the General Translation useTranslations hook across React, Next.js, TanStack Start, and React Native.
+- [Configuration](en-US/docs/react/reference/config.mdx): Configure General Translation across the React ecosystem with the shared gt.config.json file and runtime initialization. API reference for gt.config.json.
+- [Lint rules](en-US/docs/react/reference/lint-rules.mdx): Reference for the General Translation React Core linter rules that keep translatable content static and correct. API reference for the React Core linter rules.
+- [App Router middleware](en-US/docs/react/nextjs/app-router-middleware.mdx): How to configure General Translation locale routing for the Next.js App Router.
+- [App Router static site generation](en-US/docs/react/nextjs/app-router-static-site-generation.mdx): How to pre-render localized Next.js App Router pages with General Translation.
+- [Configuration](en-US/docs/react/nextjs/config.mdx): Configure General Translation in a Next.js app with the withGTConfig plugin from gt-next/config, its options, and local versus CDN translations. API reference for withGTConfig.
+- [Next.js](en-US/docs/react/nextjs.mdx): Explore the Next.js-specific features of General Translation, including server components, server functions, the config plugin, middleware, request locale registration, and localized navigation.
+- [Localized navigation](en-US/docs/react/nextjs/link.mdx): Navigate directly to localized routes in Next.js with General Translation's locale-aware Link component. API reference for Link.
+- [Pages Router middleware](en-US/docs/react/nextjs/pages-router-middleware.mdx): How to configure General Translation locale routing for the Next.js Pages Router.
+- [Pages Router static site generation](en-US/docs/react/nextjs/pages-router-static-site-generation.mdx): How to pre-render localized Next.js Pages Router pages with General Translation.
+- [Registering request locales](en-US/docs/react/nextjs/registering-request-locales.mdx): How to register a locale for Next.js App Router route handlers and generated metadata images with General Translation.
+- [Server components](en-US/docs/react/nextjs/server-components.mdx): Translate content in React Server Components with General Translation, and understand how gt-next behaves in server versus client components.
+- [React Native](en-US/docs/react/react-native.mdx): Explore the React Native-specific setup for General Translation, including module-level initialization, the provider, and the polyfill plugin.
+- [Plugin](en-US/docs/react/react-native/plugin.mdx): Reference for the General Translation gt-react-native Babel plugin, which injects the Intl polyfills React Native needs. API reference for the gt-react-native plugin.
+- [Set up React Native](en-US/docs/react/react-native/setup.mdx): Initialize General Translation in a React Native app, add the provider, and load translations, for both Expo and the bare React Native CLI.
+- [TanStack Start](en-US/docs/react/tanstack-start.mdx): Explore the TanStack Start-specific setup for General Translation, including root-route initialization, locale resolution, and provider hydration.
+- [Set up TanStack Start](en-US/docs/react/tanstack-start/setup.mdx): Initialize General Translation in a TanStack Start app, resolve the locale, and hydrate the provider from the root route.
+- [Branch](en-US/docs/react/reference/components/branch.mdx): Render content conditionally based on a value with General Translation gt-react. API reference for Branch.
+- [Currency](en-US/docs/react/reference/components/currency.mdx): Format a currency amount for the active locale with General Translation gt-react. API reference for Currency.
+- [DateTime](en-US/docs/react/reference/components/datetime.mdx): Format a date and time for the active locale with General Translation gt-react. API reference for DateTime.
+- [Derive](en-US/docs/react/reference/components/derive.mdx): Mark finite content variants for extraction inside a translation with General Translation gt-react. API reference for Derive.
+- [GTProvider](en-US/docs/react/reference/components/gt-provider.mdx): Provide the active locale and translations to a General Translation gt-react component tree. API reference for GTProvider.
+- [LocaleSelector](en-US/docs/react/reference/components/locale-selector.mdx): Render a dropdown for switching the active locale with General Translation gt-react. API reference for LocaleSelector.
+- [Num](en-US/docs/react/reference/components/num.mdx): Format a number for the active locale with General Translation gt-react. API reference for Num.
+- [Plural](en-US/docs/react/reference/components/plural.mdx): Render count-based content using the active locale's plural rules with General Translation gt-react. API reference for Plural.
+- [RegionSelector](en-US/docs/react/reference/components/region-selector.mdx): Render a dropdown for switching the active region with General Translation gt-react. API reference for RegionSelector.
+- [RelativeTime](en-US/docs/react/reference/components/relative-time.mdx): Format a localized relative time such as "2 hours ago" with General Translation gt-react. API reference for RelativeTime.
+- [T](en-US/docs/react/reference/components/t.mdx): Translate JSX children in place with General Translation gt-react. API reference for T.
+- [Var](en-US/docs/react/reference/components/var.mdx): Render a dynamic value inside a translation without translating it, with General Translation gt-react. API reference for Var.
+- [declareVar](en-US/docs/react/reference/functions/declare-var.mdx): Mark a non-translatable variable inside derived content with General Translation gt-react. API reference for declareVar.
+- [decodeVars](en-US/docs/react/reference/functions/decode-vars.mdx): Expand variables encoded by declareVar back into their values with General Translation gt-react. API reference for decodeVars.
+- [derive](en-US/docs/react/reference/functions/derive.mdx): Mark finite content variants inside a string translation for extraction with General Translation gt-react. API reference for derive.
+- [getTranslationsSnapshot](en-US/docs/react/reference/functions/get-translations-snapshot.mdx): Load a locale's translations for the General Translation gt-react provider. API reference for getTranslationsSnapshot.
+- [loadDictionary](en-US/docs/react/reference/functions/load-dictionary.mdx): Load your own dictionary translations as a standalone i18n library with General Translation gt-react. API reference for loadDictionary.
+- [loadTranslations](en-US/docs/react/reference/functions/load-translations.mdx): Customize how translations are loaded in production with General Translation gt-react. API reference for loadTranslations.
+- [msg](en-US/docs/react/reference/functions/msg.mdx): Register and encode a string for translation at module scope with General Translation gt-react. API reference for msg.
+- [t](en-US/docs/react/reference/functions/t-function.mdx): Translate strings synchronously at module scope with General Translation gt-react. API reference for t.
+- [useDefaultLocale](en-US/docs/react/reference/hooks/use-default-locale.mdx): Read the source (default) locale with General Translation gt-react. API reference for useDefaultLocale.
+- [useGT](en-US/docs/react/reference/hooks/use-gt.mdx): Get a function to translate strings inline with General Translation gt-react. API reference for useGT.
+- [useLocaleDirection](en-US/docs/react/reference/hooks/use-locale-direction.mdx): Read the text direction for a locale with General Translation gt-react. API reference for useLocaleDirection.
+- [useLocaleProperties](en-US/docs/react/reference/hooks/use-locale-properties.mdx): Read display metadata for a locale with General Translation gt-react. API reference for useLocaleProperties.
+- [useLocaleSelector](en-US/docs/react/reference/hooks/use-locale-selector.mdx): Build a custom locale switcher with General Translation gt-react. API reference for useLocaleSelector.
+- [useLocale](en-US/docs/react/reference/hooks/use-locale.mdx): Read the active locale with General Translation gt-react. API reference for useLocale.
+- [useLocales](en-US/docs/react/reference/hooks/use-locales.mdx): List the supported locales with General Translation gt-react. API reference for useLocales.
+- [useMessages](en-US/docs/react/reference/hooks/use-messages.mdx): Resolve strings registered with msg into the active locale with General Translation gt-react. API reference for useMessages.
+- [useRegionSelector](en-US/docs/react/reference/hooks/use-region-selector.mdx): Build a custom region switcher with General Translation gt-react. API reference for useRegionSelector.
+- [useRegion](en-US/docs/react/reference/hooks/use-region.mdx): Read the active region with General Translation gt-react. API reference for useRegion.
+- [useSetLocale](en-US/docs/react/reference/hooks/use-set-locale.mdx): Change the active locale with General Translation gt-react. API reference for useSetLocale.
+- [useSetRegion](en-US/docs/react/reference/hooks/use-set-region.mdx): Change the active region with General Translation gt-react. API reference for useSetRegion.
+- [useTranslations](en-US/docs/react/reference/hooks/use-translations.mdx): Look up string translations from a dictionary by id with General Translation gt-react. API reference for useTranslations.
+- [DictionaryTranslationOptions](en-US/docs/react/reference/types/dictionary-translation-options.mdx): Options for passing variables to dictionary entries with General Translation gt-react. API reference for DictionaryTranslationOptions.
+- [InlineTranslationOptions](en-US/docs/react/reference/types/inline-translation-options.mdx): Options for passing variables and metadata to inline string translations with General Translation gt-react. API reference for InlineTranslationOptions.
+- [Tx](en-US/docs/react/nextjs/reference/components/tx.mdx): Translate request-time JSX in Next.js App Router server components with General Translation. API reference for Tx.
+- [createNextMiddleware](en-US/docs/react/nextjs/reference/functions/create-next-middleware.mdx): Add locale routing and detection to a Next.js app with General Translation. API reference for createNextMiddleware.
+- [getGT](en-US/docs/react/nextjs/reference/functions/get-gt.mdx): Translate standalone strings in asynchronous Next.js App Router components with General Translation. API reference for getGT.
+- [getLocaleDirection](en-US/docs/react/nextjs/reference/functions/get-locale-direction.mdx): Read the text direction for a Next.js App Router locale with General Translation. API reference for getLocaleDirection.
+- [getLocale](en-US/docs/react/nextjs/reference/functions/get-locale.mdx): Read the current Next.js App Router request locale with General Translation. API reference for getLocale.
+- [getMessages](en-US/docs/react/nextjs/reference/functions/get-messages.mdx): Resolve encoded messages in asynchronous Next.js App Router components with General Translation. API reference for getMessages.
+- [getRegion](en-US/docs/react/nextjs/reference/functions/get-region.mdx): Read the current Next.js App Router request region with General Translation. API reference for getRegion.
+- [getTranslations](en-US/docs/react/nextjs/reference/functions/get-translations.mdx): Read dictionary translations in asynchronous Next.js App Router components with General Translation. API reference for getTranslations.
+- [registerLocale](en-US/docs/react/nextjs/reference/functions/register-locale.mdx): Register a locale for Next.js App Router server code with General Translation. API reference for registerLocale.
+- [resolveCanonicalLocale](en-US/docs/react/nextjs/reference/functions/resolve-canonical-locale.mdx): Resolve a configured locale alias in Next.js App Router server code with General Translation. API reference for resolveCanonicalLocale.
+- [tx](en-US/docs/react/nextjs/reference/functions/tx.mdx): Translate request-time strings in Next.js App Router server code with General Translation. API reference for tx.

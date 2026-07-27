@@ -1,0 +1,64 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/general-translation-openapi-original.yml
+note: >
+  Entity graph derived from the General Translation OpenAPI operations and their
+  path/id parameters (projectId, fileId, jobId, branch, tag, locale). Object
+  reference is not published as a formal schema registry, so relationships are
+  inferred from operation surfaces.
+entities:
+  - name: Project
+    id_param: projectId
+    description: Top-level container; API keys are bound to a project (or org key + gt-project-id).
+    operations: [getProjectInfo, updateProjectInfo]
+  - name: File
+    id_param: fileId
+    description: A source file uploaded to a project; has versions, locales, and translation state.
+    operations: [uploadSourceFiles, getFileInfo, downloadFile, downloadFiles, moveFiles, getOrphanedFiles, submitDiffs]
+  - name: Translation
+    description: A translated rendering of a file for a target locale.
+    operations: [uploadTranslations, enqueueTranslations, getTranslationStatus, publishFiles, translate]
+  - name: Branch
+    id_param: branch
+    description: Per-git-branch tracking of translations.
+    operations: [getBranchInfo, createBranch]
+  - name: Tag
+    id_param: tag
+    description: A tag on file versions for release tracking.
+    operations: [createTag]
+  - name: Job
+    id_param: jobId
+    description: Background job (translation enqueue or context generation).
+    operations: [getJobsInfo, getContextStatus, enqueueTranslations, generateContext, shouldGenerateContext]
+  - name: Context
+    description: Project glossary terms and translation instructions generated from source.
+    operations: [generateContext, shouldGenerateContext, getContextStatus]
+relationships:
+  - from: File
+    to: Project
+    type: belongs_to
+    via: projectId
+  - from: Translation
+    to: File
+    type: belongs_to
+    via: fileId
+  - from: Branch
+    to: Project
+    type: belongs_to
+    via: projectId
+  - from: Tag
+    to: File
+    type: has_many
+    via: version
+  - from: Job
+    to: Project
+    type: belongs_to
+    via: projectId
+  - from: Context
+    to: Project
+    type: belongs_to
+    via: projectId
+  - from: Project
+    to: File
+    type: has_many
+    via: projectId

@@ -1,0 +1,41 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs/api
+authentication:
+  style: bearer-token
+  header: Authorization
+  scheme: Bearer
+  alt_header: x-gt-api-key
+  key_prefixes:
+    development: gtx-dev-
+    production: gtx-api-
+    organization: gtx-org-
+  org_key_requirement: gt-project-id header required on project-scoped routes
+  ref: authentication/general-translation-authentication.yml
+idempotency:
+  supported: false
+  note: No idempotency-key header is documented or present in the OpenAPI.
+pagination:
+  supported: false
+  note: No cursor/offset pagination is documented; list endpoints return full result sets.
+versioning:
+  style: date-header
+  header: gt-api-version
+  current: '2026-03-06.v1'
+  ref: lifecycle/general-translation-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  shape: '{ "error": "<message>" }'
+  rfc9457: false
+  ref: errors/general-translation-problem-types.yml
+rate_limit_signaling:
+  style: 429 status (no documented rate-limit headers)
+  tiers: heavy 30 / medium 120 / light 300 / default 200 per 60s
+  ref: rate-limits/general-translation-rate-limits.yml
+project_scoping:
+  header: gt-project-id
+  note: Project keys are bound to one project; org keys must pass gt-project-id.
+webhooks:
+  supported: true
+  signing: HMAC-SHA256 (Standard Webhooks style; webhook-id / webhook-timestamp / webhook-signature)
+  ref: asyncapi/general-translation-webhooks.yml

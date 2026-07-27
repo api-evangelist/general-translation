@@ -1,0 +1,67 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.npmjs.com/package/generaltranslation
+packages:
+  - language: javascript
+    registry: npm
+    name: generaltranslation
+    url: https://www.npmjs.com/package/generaltranslation
+    install: npm install generaltranslation
+    version: 9.0.3
+    description: Core language toolkit / i18n library (utility functions + GT class).
+    repository: https://github.com/generaltranslation/gt
+    official: true
+  - language: javascript
+    registry: npm
+    name: gt-react
+    url: https://www.npmjs.com/package/gt-react
+    install: npm install gt-react
+    version: 11.0.11
+    description: React library for automatic internationalization.
+    repository: https://github.com/generaltranslation/gt
+    official: true
+  - language: javascript
+    registry: npm
+    name: gt-next
+    url: https://www.npmjs.com/package/gt-next
+    install: npm install gt-next
+    version: 11.0.11
+    description: Next.js library for automatic internationalization.
+    repository: https://github.com/generaltranslation/gt
+    official: true
+  - language: javascript
+    registry: npm
+    name: gt-react-native
+    url: https://www.npmjs.com/package/gt-react-native
+    install: npm install gt-react-native
+    version: 11.0.11
+    description: i18n package for React Native.
+    repository: https://github.com/generaltranslation/gt
+    official: true
+  - language: javascript
+    registry: npm
+    name: gtx-cli
+    url: https://www.npmjs.com/package/gtx-cli
+    install: npm install gtx-cli
+    version: 2.14.64
+    description: CLI tool for AI-powered i18n (wrapper for gt).
+    repository: https://github.com/generaltranslation/gt
+    official: true
+  - language: javascript
+    registry: npm
+    name: locadex
+    url: https://www.npmjs.com/package/locadex
+    install: npm install locadex
+    version: 1.0.199
+    description: AI agent for internationalization.
+    repository: https://github.com/generaltranslation/gt
+    official: true
+  - language: python
+    registry: pypi
+    name: generaltranslation
+    url: https://pypi.org/project/generaltranslation/
+    install: pip install generaltranslation
+    version: 0.0.4
+    description: Core Python language toolkit for General Translation.
+    repository: https://github.com/generaltranslation/gt-python
+    official: true

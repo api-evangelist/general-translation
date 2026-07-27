@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/pricing
+standards:
+  - id: soc2-type-ii
+    conforms: true
+    evidence: SOC 2 Type II certification published on the pricing/security page (all plans).
+  - id: iso-27001
+    conforms: true
+    evidence: ISO 27001 certification published on the pricing page (Enterprise plan).
+  - id: gdpr
+    conforms: true
+    evidence: GDPR-compliant badge on the site footer.
+  - id: oauth2
+    conforms: false
+    evidence: API uses HTTP Bearer API-key auth, not OAuth2.
+  - id: oidc
+    conforms: true
+    evidence: Enterprise SSO supports SAML and OIDC for dashboard identity (not API auth).
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Errors use a simple application/json envelope { "error": string }, not application/problem+json.'
+  - id: rfc7519-bearer-token
+    conforms: true
+    evidence: openapi securityScheme type http scheme bearer.
+  - id: date-based-api-versioning
+    conforms: true
+    evidence: gt-api-version header with dated versions (e.g. 2026-03-06.v1).
+  - id: webhook-signature-verification
+    conforms: true
+    evidence: HMAC-SHA256 signed webhooks with webhook-id/webhook-timestamp/webhook-signature headers (Standard Webhooks style).

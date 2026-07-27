@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: api2.gtx.dev
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 21 00:12:32 2026 GMT
+  hsts: false
+- host: runtime2.gtx.dev
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep  8 18:55:10 2026 GMT
+  hsts: false
+domains:
+- domain: gtx.dev
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: false

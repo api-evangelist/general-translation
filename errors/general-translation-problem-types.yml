@@ -1,0 +1,48 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/general-translation-openapi-original.yml
+format: json
+envelope:
+  field: error
+  media_type: application/json
+  schema: '{ "error": "<human-readable message>" }'
+note: >
+  General Translation returns a simple JSON error envelope (not RFC 9457
+  application/problem+json). Titles/remediation enriched from the public API
+  reference (https://generaltranslation.com/en-US/docs/api).
+problems:
+  - status: 400
+    component: BadRequest
+    title: Bad request
+    detail: The request was invalid (malformed body, missing required field, or unsupported file).
+    remediation: Validate the request body and required headers (gt-project-id for org keys).
+  - status: 401
+    component: Unauthorized
+    title: Unauthorized
+    detail: Missing or invalid API key.
+    remediation: Send a valid key in the Authorization Bearer header (or x-gt-api-key); check key prefix/environment.
+  - status: 402
+    component: PaymentRequired
+    title: Payment required
+    detail: Payment or quota validation failed.
+    remediation: Check plan usage/quota in the dashboard; upgrade or wait for quota reset.
+  - status: 403
+    component: Forbidden
+    title: Forbidden
+    detail: The API key lacks the required permission, or the action is not allowed on the current plan.
+    remediation: Grant the required key permission (e.g. project:files:write) or use a production-capable key.
+  - status: 404
+    component: NotFound
+    title: Not found
+    detail: The requested resource (project, file, branch, tag, or job) was not found.
+    remediation: Verify the project/file/branch/tag/job identifier.
+  - status: 429
+    component: RateLimited
+    title: Rate limited
+    detail: Rate limit or quota exceeded.
+    remediation: Back off and retry; respect per-60s tier limits (heavy 30, medium 120, light 300, default 200).
+  - status: 503
+    component: ServiceUnavailable
+    title: Service unavailable
+    detail: The server is temporarily busy.
+    remediation: Retry with exponential backoff.

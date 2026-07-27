@@ -1,0 +1,47 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs/cli
+name: gtx
+binary: gt
+package: gtx-cli
+docs: https://generaltranslation.com/en-US/docs/cli
+install:
+  - method: npx
+    command: npx gtx-cli
+  - method: npm
+    command: npm install gtx-cli
+config_file: gt.config.json
+commands:
+  - name: gt init
+    description: Run the setup wizard to configure a project.
+  - name: gt setup
+    description: Upload source files and register a project.
+  - name: gt configure
+    description: Create a gt.config.json file.
+  - name: gt auth
+    description: Generate API credentials for a project.
+  - name: gt translate
+    description: Translate a project through the General Translation API.
+  - name: gt generate
+    description: Generate a source template for a project.
+  - name: gt upload
+    description: Upload source files and translations to the platform.
+  - name: gt enqueue
+    description: Queue uploaded files for translation without downloading results.
+  - name: gt download
+    description: Download completed translations.
+  - name: gt stage
+    description: Submit a project for translation with human review required.
+  - name: gt save-local
+    description: Sync local translation edits back to the platform.
+  - name: gt validate
+    description: Check a project for translation errors without calling the API.
+supported_formats:
+  - GT JSX (gt-next / gt-react / gt-react-native)
+  - JSON
+  - YAML
+  - MDX / Markdown
+  - HTML
+  - Plain text
+  - PO / POT (gettext)
+  - TypeScript / JavaScript

@@ -1,0 +1,26 @@
+{
+  "provider": "general-translation",
+  "sources": [
+    "general-translation-branches-api-openapi.yml",
+    "general-translation-context-api-openapi.yml",
+    "general-translation-files-api-openapi.yml",
+    "general-translation-jobs-api-openapi.yml",
+    "general-translation-project-api-openapi.yml",
+    "general-translation-tags-api-openapi.yml",
+    "general-translation-translation-api-openapi.yml"
+  ],
+  "outputs": [
+    "general-translation-branches-api-openapi.yml",
+    "general-translation-context-api-openapi.yml",
+    "general-translation-files-api-openapi.yml",
+    "general-translation-jobs-api-openapi.yml",
+    "general-translation-project-api-openapi.yml",
+    "general-translation-tags-api-openapi.yml",
+    "general-translation-translation-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

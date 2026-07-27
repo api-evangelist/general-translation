@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs/api
+versioning:
+  scheme: date-header
+  header: gt-api-version
+  current: '2026-03-06.v1'
+  supported:
+    - '2025-01-01.v0'
+    - '2025-11-03.v1'
+    - '2026-02-18.v1'
+    - '2026-03-06.v1'
+  default: earliest-supported
+  docs: https://generaltranslation.com/en-US/docs/api
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >
+    Older dated API versions remain supported and are selectable via the
+    gt-api-version header; no formal Sunset/Deprecation header policy is published.
+sla:
+  url: null
+  note: Custom SLAs offered on the Enterprise plan.
+status_page: https://gt-status.com
+deprecated_operations: []

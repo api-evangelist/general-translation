@@ -1,0 +1,19 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/general-translation-openapi-original.yml
+note: >
+  Agent Skills generated from the General Translation OpenAPI. Every step is
+  grounded in a real operationId verified in the spec. Not provider-published.
+skills:
+  - file: general-translation-translate-files.md
+    name: Translate a project's source files
+    api: openapi/general-translation-openapi-original.yml
+    operations: [uploadSourceFiles, enqueueTranslations, getTranslationStatus, downloadFiles, publishFiles]
+  - file: general-translation-generate-context.md
+    name: Generate translation context for a project
+    api: openapi/general-translation-openapi-original.yml
+    operations: [shouldGenerateContext, generateContext, getContextStatus]
+  - file: general-translation-runtime-translate.md
+    name: Translate content at runtime
+    api: openapi/general-translation-openapi-original.yml
+    operations: [translate]

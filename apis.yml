@@ -1,22 +1,197 @@
 aid: general-translation
 name: General Translation
-description: General Translation is a company surfaced as a portfolio company of a16z and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  General Translation is an end-to-end internationalization (i18n) and localization
+  platform for developers, backed by a16z. It combines open-source i18n libraries for
+  React, Next.js, React Native, Node.js, and Python with an AI-powered translation API,
+  a context platform (glossaries and translation instructions), and Locadex, an AI
+  coding agent that internationalizes source code and opens pull requests. The public
+  REST API (api2.gtx.dev, plus the runtime host runtime2.gtx.dev) uploads source files,
+  queues and downloads translations, manages branches and tags, reads project and job
+  status, and translates content at runtime. It is used by developer-first teams
+  including Cursor, Windsurf, Ramp, Mintlify, and ClickHouse.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://avatars.githubusercontent.com/u/153253056?v=4
 url: https://raw.githubusercontent.com/api-evangelist/general-translation/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - a16z
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Internationalization
+- Localization
+- Translation
+- Developer Tools
+- Artificial Intelligence
+- i18n
+- SDKs
+- Machine Translation
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: general-translation:general-translation-branches-api
+  name: General Translation Branches API
+  description: Read and create project branches.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Branches
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-branches-api-openapi.yml
+- aid: general-translation:general-translation-context-api
+  name: General Translation Context API
+  description: Generate translation context such as glossaries and instructions.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Context
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-context-api-openapi.yml
+- aid: general-translation:general-translation-files-api
+  name: General Translation Files API
+  description: Upload, download, publish, move, and inspect project files.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-files-api-openapi.yml
+- aid: general-translation:general-translation-jobs-api
+  name: General Translation Jobs API
+  description: Read background job status.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-jobs-api-openapi.yml
+- aid: general-translation:general-translation-project-api
+  name: General Translation Project API
+  description: Read and update project information.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Project
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-project-api-openapi.yml
+- aid: general-translation:general-translation-tags-api
+  name: General Translation Tags API
+  description: Tag file versions.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-tags-api-openapi.yml
+- aid: general-translation:general-translation-translation-api
+  name: General Translation Translation API
+  description: Translate content at runtime and queue files for translation.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Translation
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-translation-api-openapi.yml
+common:
+- type: DeveloperPortal
+  url: https://generaltranslation.com/en-US/docs
+- type: Documentation
+  url: https://generaltranslation.com/en-US/docs
+- type: APIReference
+  url: https://generaltranslation.com/en-US/docs/api
+- type: GettingStarted
+  url: https://generaltranslation.com/en-US/docs/cli/quickstart
+- type: Blog
+  url: https://generaltranslation.com/en-US/blog
+- type: Support
+  url: https://generaltranslation.com/discord
+- type: GitHubOrganization
+  url: https://github.com/generaltranslation
+- type: Pricing
+  url: https://generaltranslation.com/en-US/pricing
+- type: SignUp
+  url: https://generaltranslation.com/en-US/dashboard
+- type: Login
+  url: https://dash.generaltranslation.com
+- type: TermsOfService
+  url: https://generaltranslation.com/en-US/legal/terms-of-service
+- type: PrivacyPolicy
+  url: https://generaltranslation.com/en-US/legal/privacy-policy
+- type: Website
+  url: https://generaltranslation.com
+- type: StatusPage
+  url: https://gt-status.com
+- type: Packages
+  url: packages/general-translation-packages.yml
+- type: SDKs
+  url: packages/general-translation-packages.yml
+- type: CLI
+  url: cli/general-translation-cli.yml
+- type: MCPServer
+  url: mcp/general-translation-mcp.yml
+- type: LLMsTxt
+  url: llms/general-translation-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Authentication
+  url: authentication/general-translation-authentication.yml
+- type: Conventions
+  url: conventions/general-translation-conventions.yml
+- type: RateLimits
+  url: rate-limits/general-translation-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/general-translation-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/general-translation-lifecycle.yml
+- type: ChangeLog
+  url: changelog/general-translation-changelog.yml
+- type: Sandbox
+  url: sandbox/general-translation-sandbox.yml
+- type: Components
+  url: components/general-translation-components.yml
+- type: DataModel
+  url: data-model/general-translation-data-model.yml
+- type: Webhooks
+  url: asyncapi/general-translation-webhooks.yml
+- type: Conformance
+  url: conformance/general-translation-conformance.yml
+- type: Compliance
+  url: https://generaltranslation.com/en-US/pricing
+- type: AgenticAccess
+  url: agentic-access/general-translation-agentic-access.yml
+- type: DomainSecurity
+  url: security/general-translation-domain-security.yml
+- type: WellKnown
+  url: well-known/general-translation-well-known.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

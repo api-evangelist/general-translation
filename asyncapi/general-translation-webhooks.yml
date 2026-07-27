@@ -1,0 +1,39 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs/platform/dashboard/reference/webhooks
+spec_type: Webhooks
+note: >
+  General Translation documents webhook events (configured in the dashboard) but
+  publishes no AsyncAPI document. Captured here as a webhook catalog. Delivery is
+  at-least-once; endpoints should be idempotent on event id.
+transport: https
+delivery:
+  method: POST
+  guarantee: at-least-once
+  timeout_seconds: 10
+  retries: up to 10 attempts with exponential backoff
+  dedupe_on: event id (webhook-id)
+signature:
+  scheme: HMAC-SHA256 (Standard Webhooks style)
+  headers:
+    - webhook-id
+    - webhook-timestamp
+    - webhook-signature
+  signature_format: 'v1,<base64-hmac>'
+  signing_key_prefix: whsec_
+  signed_content: 'webhook-id.webhook-timestamp.<raw-body>'
+  replay_window_seconds: 300
+payload:
+  envelope:
+    - id
+    - type
+    - created_at
+    - api_version
+    - data.object
+events:
+  - type: translated_file.completed
+    description: A translated file finished processing and is available.
+  - type: translated_file.edited
+    description: A translated file was edited (e.g. via dashboard review).
+  - type: translation_job.completed
+    description: A queued translation job finished.

@@ -1,0 +1,76 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/general-translation-openapi-original.yml
+note: >
+  No official hosted/remote MCP server was found for General Translation (docs,
+  npm @modelcontextprotocol, MCP registries all negative as of 2026-07-19). This
+  is a DERIVED candidate tool list, one tool per OpenAPI operationId, to seed a
+  future MCP server. Not published by the provider.
+server:
+  name: general-translation
+  transport: http
+tools:
+  - name: uploadSourceFiles
+    description: Upload one or more source files to the project (max 100 per request).
+    source_operation: openapi/general-translation-openapi-original.yml#uploadSourceFiles
+  - name: uploadTranslations
+    description: Upload translated files to the project.
+    source_operation: openapi/general-translation-openapi-original.yml#uploadTranslations
+  - name: submitDiffs
+    description: Submit source file diffs.
+    source_operation: openapi/general-translation-openapi-original.yml#submitDiffs
+  - name: shouldGenerateContext
+    description: Check whether translation context should be generated.
+    source_operation: openapi/general-translation-openapi-original.yml#shouldGenerateContext
+  - name: generateContext
+    description: Generate project glossary terms and translation instructions.
+    source_operation: openapi/general-translation-openapi-original.yml#generateContext
+  - name: getContextStatus
+    description: Get the status of a context generation job.
+    source_operation: openapi/general-translation-openapi-original.yml#getContextStatus
+  - name: enqueueTranslations
+    description: Queue files for translation.
+    source_operation: openapi/general-translation-openapi-original.yml#enqueueTranslations
+  - name: publishFiles
+    description: Publish translated files.
+    source_operation: openapi/general-translation-openapi-original.yml#publishFiles
+  - name: downloadFile
+    description: Download a single translated file.
+    source_operation: openapi/general-translation-openapi-original.yml#downloadFile
+  - name: downloadFiles
+    description: Download multiple translated files.
+    source_operation: openapi/general-translation-openapi-original.yml#downloadFiles
+  - name: getBranchInfo
+    description: Read project branch information.
+    source_operation: openapi/general-translation-openapi-original.yml#getBranchInfo
+  - name: createBranch
+    description: Create a project branch.
+    source_operation: openapi/general-translation-openapi-original.yml#createBranch
+  - name: createTag
+    description: Tag file versions.
+    source_operation: openapi/general-translation-openapi-original.yml#createTag
+  - name: getProjectInfo
+    description: Read project information.
+    source_operation: openapi/general-translation-openapi-original.yml#getProjectInfo
+  - name: updateProjectInfo
+    description: Update project settings.
+    source_operation: openapi/general-translation-openapi-original.yml#updateProjectInfo
+  - name: getJobsInfo
+    description: Read background job status.
+    source_operation: openapi/general-translation-openapi-original.yml#getJobsInfo
+  - name: getFileInfo
+    description: Inspect source file metadata, versions, locales, and state.
+    source_operation: openapi/general-translation-openapi-original.yml#getFileInfo
+  - name: getTranslationStatus
+    description: Check translation progress by file and locale.
+    source_operation: openapi/general-translation-openapi-original.yml#getTranslationStatus
+  - name: moveFiles
+    description: Move/rename project files.
+    source_operation: openapi/general-translation-openapi-original.yml#moveFiles
+  - name: getOrphanedFiles
+    description: List orphaned files in the project.
+    source_operation: openapi/general-translation-openapi-original.yml#getOrphanedFiles
+  - name: translate
+    description: Translate content at runtime (runtime2.gtx.dev).
+    source_operation: openapi/general-translation-openapi-original.yml#translate

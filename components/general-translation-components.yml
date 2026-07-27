@@ -1,0 +1,37 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs
+note: >
+  General Translation ships client-side i18n UI components (a component-based
+  translation model using a <T> component instead of translation keys) across its
+  React-family libraries. These are embeddable in application code and distinct
+  from the server-side language toolkit.
+families:
+  - name: React components (gt-react)
+    loader: gt-react
+    docs: https://generaltranslation.com/en-US/docs/react
+    components:
+      - name: <T>
+        description: Wraps translatable JSX; content is translated with surrounding context.
+      - name: <Var>
+        description: Marks dynamic/interpolated values inside a <T> block.
+      - name: <Branch>
+        description: Conditional content selection for translation.
+      - name: <Plural>
+        description: Plural-form selection for translation.
+      - name: <GTProvider>
+        description: Provider that supplies locale + translation config to the tree.
+  - name: Next.js components (gt-next)
+    loader: gt-next
+    docs: https://generaltranslation.com/en-US/docs/next
+    components:
+      - name: <T>
+        description: Server/client translatable content component for Next.js.
+      - name: <GTProvider>
+        description: Locale/config provider for the Next.js app tree.
+  - name: React Native components (gt-react-native)
+    loader: gt-react-native
+    docs: https://generaltranslation.com/en-US/docs/react-native
+    components:
+      - name: <T>
+        description: Translatable content component for React Native.

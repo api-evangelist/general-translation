@@ -1,0 +1,19 @@
+generated: '2026-07-19'
+method: searched
+source: https://generaltranslation.com/en-US/docs/api
+window_seconds: 60
+signal: 429 RateLimited response (no rate-limit response headers documented)
+tiers:
+  - name: heavy
+    limit_count: 30
+    per_seconds: 60
+    applies_to: Expensive operations (context generation, runtime translation).
+  - name: medium
+    limit_count: 120
+    per_seconds: 60
+  - name: light
+    limit_count: 300
+    per_seconds: 60
+  - name: default
+    limit_count: 200
+    per_seconds: 60
