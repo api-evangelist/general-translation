@@ -1,0 +1,742 @@
+{
+  "info": {
+    "_postman_id": "ae8f2e6e-d1c1-4b69-9709-29d1dd21041f",
+    "name": "General Translation Branches API",
+    "description": "The public General Translation API. Use it to upload source content and translated files, download translations, queue and translate content, manage branches and tags, and read project and job status.\n\nMost endpoints operate on a single project and live under `https://api2.gtx.dev`. The runtime translation endpoint (`POST /v2/translate`) is served from `https://runtime2.gtx.dev`.\n\nAuthenticate every request with an API key as a bearer token in the standard `Authorization: Bearer <key>` header. Project keys (`gtx-api-`, `gtx-dev-`) are bound to one project. Organization keys (`gtx-org-`) work across projects but must include the target project in the `gt-project-id` header for project-scoped routes.\n\n\nContact Support:\n Name: General Translation Support\n Email: support@generaltranslation.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:43:54.000Z",
+    "updatedAt": "2026-07-28T01:43:54.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-ae8f2e6e-d1c1-4b69-9709-29d1dd21041f"
+  },
+  "item": [
+    {
+      "name": "v2",
+      "item": [
+        {
+          "name": "project",
+          "item": [
+            {
+              "name": "branches",
+              "item": [
+                {
+                  "name": "info",
+                  "item": [
+                    {
+                      "name": "Get branch information",
+                      "id": "5009ad13-2ebb-4e4c-93b7-21dc3cfef40e",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                            "key": "gt-api-version",
+                            "value": "2026-03-06.v1"
+                          },
+                          {
+                            "description": "Target project ID. Required when authenticating with an organization API key.",
+                            "key": "gt-project-id",
+                            "value": "<string>"
+                          },
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v2/project/branches/info",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v2",
+                            "project",
+                            "branches",
+                            "info"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "9a8b8cc4-cde7-4266-b994-604a6c62d74b",
+                          "name": "Branch information.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/info",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "info"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"branches\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"defaultBranch\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-9a8b8cc4-cde7-4266-b994-604a6c62d74b"
+                        },
+                        {
+                          "id": "81231d53-7e22-4b5d-bbe5-d10df73e1ed6",
+                          "name": "The request was invalid.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/info",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "info"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-81231d53-7e22-4b5d-bbe5-d10df73e1ed6"
+                        },
+                        {
+                          "id": "e29adcfd-6209-4374-91c4-d137bbf42a14",
+                          "name": "Missing or invalid API key.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/info",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "info"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-e29adcfd-6209-4374-91c4-d137bbf42a14"
+                        },
+                        {
+                          "id": "c0dbc934-c13d-4d62-8487-3b4d7344bf1a",
+                          "name": "The API key lacks the required permission, or the action is not allowed on the current plan.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/info",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "info"
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-c0dbc934-c13d-4d62-8487-3b4d7344bf1a"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:43:54.000Z",
+                      "updatedAt": "2026-07-28T01:43:54.000Z",
+                      "uid": "35240-5009ad13-2ebb-4e4c-93b7-21dc3cfef40e"
+                    }
+                  ],
+                  "id": "32d9143d-99d6-4268-b2ac-1ee252fcaf26",
+                  "createdAt": "2026-07-28T01:43:54.000Z",
+                  "updatedAt": "2026-07-28T01:43:54.000Z",
+                  "uid": "35240-32d9143d-99d6-4268-b2ac-1ee252fcaf26"
+                },
+                {
+                  "name": "create",
+                  "item": [
+                    {
+                      "name": "Create a branch",
+                      "id": "3b65fc2d-f901-4383-809d-6624158efd2d",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                            "key": "gt-api-version",
+                            "value": "2026-03-06.v1"
+                          },
+                          {
+                            "description": "Target project ID. Required when authenticating with an organization API key.",
+                            "key": "gt-project-id",
+                            "value": "<string>"
+                          },
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"branchName\": \"<string>\",\n  \"defaultBranch\": false\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v2/project/branches/create",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v2",
+                            "project",
+                            "branches",
+                            "create"
+                          ]
+                        },
+                        "description": "Create a new branch, or rename and confirm the default branch."
+                      },
+                      "response": [
+                        {
+                          "id": "2e31bd83-6761-4dce-8317-1e2a090c4fa9",
+                          "name": "Created branch.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"branchName\": \"<string>\",\n  \"defaultBranch\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/create",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "create"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"branch\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-2e31bd83-6761-4dce-8317-1e2a090c4fa9"
+                        },
+                        {
+                          "id": "ea615ade-d465-47a5-9af3-b6b6ea8e546b",
+                          "name": "The request was invalid.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"branchName\": \"<string>\",\n  \"defaultBranch\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/create",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "create"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-ea615ade-d465-47a5-9af3-b6b6ea8e546b"
+                        },
+                        {
+                          "id": "8a65ca12-ed03-4084-b928-aa270970a4ff",
+                          "name": "Missing or invalid API key.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"branchName\": \"<string>\",\n  \"defaultBranch\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/create",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "create"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-8a65ca12-ed03-4084-b928-aa270970a4ff"
+                        },
+                        {
+                          "id": "16791ba8-aff1-423f-bb22-3163c401bc19",
+                          "name": "Forbidden. Free plans cannot create non-default branches.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                                "key": "gt-api-version",
+                                "value": "2026-03-06.v1"
+                              },
+                              {
+                                "description": "Target project ID. Required when authenticating with an organization API key.",
+                                "key": "gt-project-id",
+                                "value": "<string>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "text/plain"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"branchName\": \"<string>\",\n  \"defaultBranch\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v2/project/branches/create",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v2",
+                                "project",
+                                "branches",
+                                "create"
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "text/plain"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "<string>",
+                          "createdAt": "2026-07-28T01:43:54.000Z",
+                          "updatedAt": "2026-07-28T01:43:54.000Z",
+                          "uid": "35240-16791ba8-aff1-423f-bb22-3163c401bc19"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:43:54.000Z",
+                      "updatedAt": "2026-07-28T01:43:54.000Z",
+                      "uid": "35240-3b65fc2d-f901-4383-809d-6624158efd2d"
+                    }
+                  ],
+                  "id": "21584b0a-8559-4e18-8891-452b51d6ef08",
+                  "createdAt": "2026-07-28T01:43:54.000Z",
+                  "updatedAt": "2026-07-28T01:43:54.000Z",
+                  "uid": "35240-21584b0a-8559-4e18-8891-452b51d6ef08"
+                }
+              ],
+              "id": "9049c2fc-2d1e-4852-8336-b2499b722a6d",
+              "createdAt": "2026-07-28T01:43:54.000Z",
+              "updatedAt": "2026-07-28T01:43:54.000Z",
+              "uid": "35240-9049c2fc-2d1e-4852-8336-b2499b722a6d"
+            }
+          ],
+          "id": "99d96ee9-b79c-426f-b727-c04d972a3e1d",
+          "createdAt": "2026-07-28T01:43:54.000Z",
+          "updatedAt": "2026-07-28T01:43:54.000Z",
+          "uid": "35240-99d96ee9-b79c-426f-b727-c04d972a3e1d"
+        }
+      ],
+      "id": "9d06f357-3025-41d4-a2aa-a5b82967411f",
+      "createdAt": "2026-07-28T01:43:54.000Z",
+      "updatedAt": "2026-07-28T01:43:54.000Z",
+      "uid": "35240-9d06f357-3025-41d4-a2aa-a5b82967411f"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api2.gtx.dev"
+    }
+  ]
+}
