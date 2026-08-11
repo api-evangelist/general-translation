@@ -120,6 +120,8 @@ apis:
   - type: OpenAPI
     url: openapi/general-translation-translation-api-openapi.yml
 common:
+- type: Overlay
+  url: overlays/general-translation-openapi-overlay.yaml
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/general-translation/overview
 - type: DeveloperPortal
