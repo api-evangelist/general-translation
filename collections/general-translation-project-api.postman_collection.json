@@ -1,0 +1,867 @@
+{
+  "item": [
+    {
+      "id": "a0e0dbe5-7109-4480-893b-226a243a51cc",
+      "name": "Project",
+      "description": {
+        "content": "Read and update project information.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "63ab02f0-129f-4101-91de-9f58bd3b38ea",
+          "name": "Get project information",
+          "request": {
+            "name": "Get project information",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "project",
+                "info",
+                ":projectId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "projectId",
+                  "description": "(Required) Must match the authenticated project."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                "key": "gt-api-version",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Target project ID. Required when authenticating with an organization API key.",
+                "key": "gt-project-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b448164-3f93-4dd9-9420-693c0db6e4e4",
+              "name": "Project information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"orgId\": \"string\",\n  \"defaultLocale\": \"string\",\n  \"currentLocales\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "841fafe8-b6b8-40d8-94ab-8979505b0389",
+              "name": "The request was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ae34511-cb5e-42be-a7f1-b0968c778ae9",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1c06723-caf3-4d5b-9866-f7c317e9b8a0",
+              "name": "The API key lacks the required permission, or the action is not allowed on the current plan.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cafbe0b2-b5b8-4765-b06a-9d77010d177b",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "570e862b-3598-417a-bdf5-eb8b0490cf59",
+          "name": "Update project information",
+          "request": {
+            "name": "Update project information",
+            "description": {
+              "content": "Update project settings such as the default locale.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "project",
+                "info",
+                ":projectId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "projectId",
+                  "description": "(Required) Must match the authenticated project."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                "key": "gt-api-version",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Target project ID. Required when authenticating with an organization API key.",
+                "key": "gt-project-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"defaultLocale\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f3b79919-6acd-4aec-b0cd-42b5bb99aa13",
+              "name": "Project updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"defaultLocale\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "952497d1-43ae-4d0f-897c-50a63bcdd7e7",
+              "name": "The request was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"defaultLocale\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9079906d-4d65-41be-9784-8eef66bcc40e",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"defaultLocale\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb2fa063-10d4-4230-8f3f-bf4d657d61a0",
+              "name": "The API key lacks the required permission, or the action is not allowed on the current plan.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"defaultLocale\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "845d618d-e23b-4479-b8dc-e30f3d0dfdea",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "info",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "projectId",
+                      "description": "(Required) Must match the authenticated project."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"defaultLocale\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api2.gtx.dev",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "95d6daeb-0a22-46cc-b9cf-cdffafbb5bb8",
+    "name": "General Translation Branches Project API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The public General Translation API. Use it to upload source content and translated files, download translations, queue and translate content, manage branches and tags, and read project and job status.\n\nMost endpoints operate on a single project and live under `https://api2.gtx.dev`. The runtime translation endpoint (`POST /v2/translate`) is served from `https://runtime2.gtx.dev`.\n\nAuthenticate every request with an API key as a bearer token in the standard `Authorization: Bearer <key>` header. Project keys (`gtx-api-`, `gtx-dev-`) are bound to one project. Organization keys (`gtx-org-`) work across projects but must include the target project in the `gt-project-id` header for project-scoped routes.\n\n\nContact Support:\n Name: General Translation Support\n Email: support@generaltranslation.com",
+      "type": "text/plain"
+    }
+  }
+}

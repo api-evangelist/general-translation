@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "General Translation Branches Project API",
+    "version": "2026-03-06.v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Project",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get project information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api2.gtx.dev/v2/project/info/:projectId",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Must match the authenticated project."
+              }
+            ]
+          },
+          "docs": "Get project information"
+        },
+        {
+          "info": {
+            "name": "Update project information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/info/:projectId",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "Must match the authenticated project."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update project settings such as the default locale."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

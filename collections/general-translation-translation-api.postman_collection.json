@@ -1,0 +1,892 @@
+{
+  "item": [
+    {
+      "id": "9fc6a635-f3f0-475d-a317-40c5c56f2cb1",
+      "name": "Translation",
+      "description": {
+        "content": "Translate content at runtime and queue files for translation.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c2526965-e05e-4a7c-ba0f-ca0b0dbe7500",
+          "name": "Queue files for translation",
+          "request": {
+            "name": "Queue files for translation",
+            "description": {
+              "content": "Enqueue uploaded source files for background translation. Max 100 files per request. The response shape depends on the requested `gt-api-version`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "project",
+                "translations",
+                "enqueue"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                "key": "gt-api-version",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Target project ID. Required when authenticating with an organization API key.",
+                "key": "gt-project-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"files\": [\n    {\n      \"fileId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"branchId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"transformFormat\": \"<string>\"\n    }\n  ],\n  \"targetLocales\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"sourceLocale\": \"<string>\",\n  \"force\": false,\n  \"modelProvider\": \"<string>\",\n  \"publish\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "95bb674d-cc6b-44b0-86a5-a4326cca2e33",
+              "name": "Files queued.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "translations",
+                    "enqueue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"fileId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"branchId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"transformFormat\": \"<string>\"\n    }\n  ],\n  \"targetLocales\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"sourceLocale\": \"<string>\",\n  \"force\": false,\n  \"modelProvider\": \"<string>\",\n  \"publish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"jobData\": {\n    \"key_0\": 3584\n  },\n  \"locales\": [\n    \"string\",\n    \"string\"\n  ],\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50dcb04e-d939-4b92-a63c-058d7ecbd967",
+              "name": "Bad request, including missing source files.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "translations",
+                    "enqueue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"fileId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"branchId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"transformFormat\": \"<string>\"\n    }\n  ],\n  \"targetLocales\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"sourceLocale\": \"<string>\",\n  \"force\": false,\n  \"modelProvider\": \"<string>\",\n  \"publish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"missing\": [\n    \"string\",\n    \"string\"\n  ],\n  \"count\": 6942\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69704f99-ea26-4090-bece-0a4d040637f0",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "translations",
+                    "enqueue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"fileId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"branchId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"transformFormat\": \"<string>\"\n    }\n  ],\n  \"targetLocales\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"sourceLocale\": \"<string>\",\n  \"force\": false,\n  \"modelProvider\": \"<string>\",\n  \"publish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8d1a978-ed30-47e1-9093-d5ebb453e93e",
+              "name": "The API key lacks the required permission, or the action is not allowed on the current plan.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "translations",
+                    "enqueue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"fileId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"branchId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"transformFormat\": \"<string>\"\n    }\n  ],\n  \"targetLocales\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"sourceLocale\": \"<string>\",\n  \"force\": false,\n  \"modelProvider\": \"<string>\",\n  \"publish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00408c12-8371-4b3d-adc3-2e9cff8c206d",
+              "name": "Rate limit or quota exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "project",
+                    "translations",
+                    "enqueue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"files\": [\n    {\n      \"fileId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"branchId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"transformFormat\": \"<string>\"\n    }\n  ],\n  \"targetLocales\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"sourceLocale\": \"<string>\",\n  \"force\": false,\n  \"modelProvider\": \"<string>\",\n  \"publish\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a102d45a-a147-4346-9796-582d8d749757",
+          "name": "Translate content at runtime",
+          "request": {
+            "name": "Translate content at runtime",
+            "description": {
+              "content": "Translate one or more strings or structured content entries with caching and memoization. Authentication is optional; unauthenticated requests may receive partial results.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "translate"
+              ],
+              "host": [
+                "{{v2-translate-Url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                "key": "gt-api-version",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Target project ID. Required when authenticating with an organization API key.",
+                "key": "gt-project-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d081a026-2a3e-4265-bc90-c804d28c9275",
+              "name": "Cached or partially completed translation results, keyed by request key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "translate"
+                  ],
+                  "host": [
+                    "{{v2-translate-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    },\n    \"key_1\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": {\n    \"success\": true,\n    \"translation\": \"string\",\n    \"error\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f33ae476-db6f-4dfb-aa7a-453653d05843",
+              "name": "Translation results, keyed by request key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "translate"
+                  ],
+                  "host": [
+                    "{{v2-translate-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    },\n    \"key_1\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": {\n    \"success\": true,\n    \"translation\": \"string\",\n    \"error\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "457f5807-834e-4a31-8df7-fadbb1cf8604",
+              "name": "The request was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "translate"
+                  ],
+                  "host": [
+                    "{{v2-translate-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    },\n    \"key_1\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc756af2-3078-4b5c-8c89-094e1059ee8f",
+              "name": "Payment or quota validation failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "translate"
+                  ],
+                  "host": [
+                    "{{v2-translate-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    },\n    \"key_1\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b7c0760-e05c-4313-a054-d8a7266b838e",
+              "name": "The API key lacks the required permission, or the action is not allowed on the current plan.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "translate"
+                  ],
+                  "host": [
+                    "{{v2-translate-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    },\n    \"key_1\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cc2bf61-cd56-407e-9255-0a91d2a7639a",
+              "name": "Rate limit or quota exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "translate"
+                  ],
+                  "host": [
+                    "{{v2-translate-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.\n",
+                    "key": "gt-api-version",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Target project ID. Required when authenticating with an organization API key.",
+                    "key": "gt-project-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requests\": {\n    \"key_0\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    },\n    \"key_1\": {\n      \"source\": {},\n      \"metadata\": {\n        \"id\": \"<string>\",\n        \"hash\": \"<string>\",\n        \"context\": \"<string>\",\n        \"maxChars\": \"<integer>\",\n        \"dataFormat\": \"STRING\",\n        \"actionType\": \"fast\",\n        \"sourceCode\": {\n          \"key_0\": [\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            },\n            {\n              \"before\": \"<string>\",\n              \"target\": \"<string>\",\n              \"after\": \"<string>\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"targetLocale\": \"<string>\",\n  \"sourceLocale\": \"<string>\",\n  \"metadata\": {\n    \"modelProvider\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api2.gtx.dev",
+      "key": "baseUrl"
+    },
+    {
+      "type": "string",
+      "value": "https://runtime2.gtx.dev",
+      "key": "v2-translate-Url"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "38afdbae-c3c1-4467-adfa-358f8e46f9e2",
+    "name": "General Branches Translation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The public General Translation API. Use it to upload source content and translated files, download translations, queue and translate content, manage branches and tags, and read project and job status.\n\nMost endpoints operate on a single project and live under `https://api2.gtx.dev`. The runtime translation endpoint (`POST /v2/translate`) is served from `https://runtime2.gtx.dev`.\n\nAuthenticate every request with an API key as a bearer token in the standard `Authorization: Bearer <key>` header. Project keys (`gtx-api-`, `gtx-dev-`) are bound to one project. Organization keys (`gtx-org-`) work across projects but must include the target project in the `gt-project-id` header for project-scoped routes.\n\n\nContact Support:\n Name: General Translation Support\n Email: support@generaltranslation.com",
+      "type": "text/plain"
+    }
+  }
+}

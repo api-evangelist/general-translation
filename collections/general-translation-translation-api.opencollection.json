@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "General Branches Translation API",
+    "version": "2026-03-06.v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Translation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Queue files for translation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/translations/enqueue",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enqueue uploaded source files for background translation. Max 100 files per request. The response shape depends on the requested `gt-api-version`.\n"
+        },
+        {
+          "info": {
+            "name": "Translate content at runtime",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/translate",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Translate one or more strings or structured content entries with caching and memoization. Authentication is optional; unauthenticated requests may receive partial results.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

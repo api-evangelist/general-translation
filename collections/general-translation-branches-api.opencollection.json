@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "General Translation Branches API",
+    "version": "2026-03-06.v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Branches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get branch information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/branches/info",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get branch information"
+        },
+        {
+          "info": {
+            "name": "Create a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/branches/create",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new branch, or rename and confirm the default branch."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

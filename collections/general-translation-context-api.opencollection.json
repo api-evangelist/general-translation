@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "General Translation Branches Context API",
+    "version": "2026-03-06.v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Context",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check if context generation is needed",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api2.gtx.dev/v2/project/setup/should-generate",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Check if context generation is needed"
+        },
+        {
+          "info": {
+            "name": "Generate translation context",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/setup/generate",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate glossaries and translation instructions for the project."
+        },
+        {
+          "info": {
+            "name": "Get context generation job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api2.gtx.dev/v2/project/setup/status/:jobId",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get context generation job status"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

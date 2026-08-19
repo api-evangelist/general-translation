@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "General Translation Branches Jobs API",
+    "version": "2026-03-06.v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get translation job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/jobs/info",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get translation job status"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

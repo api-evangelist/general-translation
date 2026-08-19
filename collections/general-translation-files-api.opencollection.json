@@ -1,0 +1,310 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "General Translation Branches Files API",
+    "version": "2026-03-06.v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload source files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/upload-files",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload one or more source files to the project. Max 100 files per request."
+        },
+        {
+          "info": {
+            "name": "Upload translated files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/upload-translations",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload translated files linked to their source files. Max 100 files per request."
+        },
+        {
+          "info": {
+            "name": "Submit translation diffs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/diffs",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Overwrite translations with user-provided localized content."
+        },
+        {
+          "info": {
+            "name": "Publish or unpublish files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/publish",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Publish or unpublish translated files to the CDN. Requires CDN to be enabled."
+        },
+        {
+          "info": {
+            "name": "Download a single file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api2.gtx.dev/v2/project/files/download/:fileId",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "versionId",
+                "value": "",
+                "type": "query",
+                "description": "Defaults to the branch head version."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "Defaults to the default branch."
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Translation locale. Omit to download the source file."
+              }
+            ]
+          },
+          "docs": "Download a single source or translated file. Prefer the batch POST endpoint."
+        },
+        {
+          "info": {
+            "name": "Download multiple files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/download",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Download up to 100 source or translated files in one request."
+        },
+        {
+          "info": {
+            "name": "Get file metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/info",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get detailed metadata for specific source and translated files."
+        },
+        {
+          "info": {
+            "name": "Get translation status for a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api2.gtx.dev/v2/project/translations/files/status/:fileId",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "versionId",
+                "value": "",
+                "type": "query",
+                "description": "Defaults to the branch head version."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "Defaults to the default branch."
+              }
+            ]
+          },
+          "docs": "Get translation status for a file"
+        },
+        {
+          "info": {
+            "name": "Move or rename files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/moves",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Clone source files and their translations under new file IDs."
+        },
+        {
+          "info": {
+            "name": "Find orphaned files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api2.gtx.dev/v2/project/files/orphaned",
+            "headers": [
+              {
+                "name": "gt-api-version",
+                "value": ""
+              },
+              {
+                "name": "gt-project-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Return files on a branch that are not present in the provided file ID list."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
