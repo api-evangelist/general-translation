@@ -41,6 +41,16 @@ tags:
 - Developer Tools
 - Artificial Intelligence
 - i18n
+- SDK
+- Machine Translation
+tags_raw:
+- Company
+- Internationalization
+- Localization
+- Translation
+- Developer Tools
+- Artificial Intelligence
+- i18n
 - SDKs
 - Machine Translation
 maintainers:
@@ -75,6 +85,8 @@ apis:
   humanURL: https://generaltranslation.com/en-US/docs/api
   baseURL: https://api2.gtx.dev
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -85,6 +97,8 @@ apis:
   humanURL: https://generaltranslation.com/en-US/docs/api
   baseURL: https://api2.gtx.dev
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
