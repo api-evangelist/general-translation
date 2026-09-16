@@ -1,15 +1,13 @@
 aid: general-translation
 name: General Translation
-description: >-
-  General Translation is an end-to-end internationalization (i18n) and localization
-  platform for developers, backed by a16z. It combines open-source i18n libraries for
-  React, Next.js, React Native, Node.js, and Python with an AI-powered translation API,
-  a context platform (glossaries and translation instructions), and Locadex, an AI
-  coding agent that internationalizes source code and opens pull requests. The public
-  REST API (api2.gtx.dev, plus the runtime host runtime2.gtx.dev) uploads source files,
-  queues and downloads translations, manages branches and tags, reads project and job
-  status, and translates content at runtime. It is used by developer-first teams
-  including Cursor, Windsurf, Ramp, Mintlify, and ClickHouse.
+description: General Translation is an end-to-end internationalization (i18n) and localization platform
+  for developers, backed by a16z. It combines open-source i18n libraries for React, Next.js, React Native,
+  Node.js, and Python with an AI-powered translation API, a context platform (glossaries and translation
+  instructions), and Locadex, an AI coding agent that internationalizes source code and opens pull requests.
+  The public REST API (api2.gtx.dev, plus the runtime host runtime2.gtx.dev) uploads source files, queues
+  and downloads translations, manages branches and tags, reads project and job status, and translates
+  content at runtime. It is used by developer-first teams including Cursor, Windsurf, Ramp, Mintlify,
+  and ClickHouse.
 deliveryModel:
   model: saas
   open_source: false
@@ -47,7 +45,7 @@ x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-09-16'
 tags:
 - Company
 - Internationalization
@@ -139,7 +137,7 @@ apis:
   - type: OpenAPI
     url: openapi/general-translation-tags-api-openapi.yml
 - aid: general-translation:general-translation-translation-api
-  name: General Translation Translation API
+  name: General Translation API
   description: Translate content at runtime and queue files for translation.
   humanURL: https://generaltranslation.com/en-US/docs/api
   baseURL: https://api2.gtx.dev
@@ -189,7 +187,10 @@ common:
   url: cli/general-translation-cli.yml
 - type: X-MCPServerCandidate
   url: mcp/general-translation-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: LLMsTxt
   url: llms/general-translation-llms.txt
 - type: AgentSkill
