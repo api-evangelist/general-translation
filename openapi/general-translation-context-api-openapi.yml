@@ -145,15 +145,22 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    Forbidden:
+      description: The API key lacks the required permission, or the action is not allowed on the current plan.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
@@ -192,13 +199,6 @@ components:
         - 2025-11-03.v1
         - 2026-02-18.v1
         - 2026-03-06.v1
-  schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message.
   securitySchemes:
     Bearer:
       type: http

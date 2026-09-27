@@ -252,15 +252,28 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
   responses:
+    Forbidden:
+      description: The API key lacks the required permission, or the action is not allowed on the current plan.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     PaymentRequired:
       description: Payment or quota validation failed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
+    RateLimited:
+      description: Rate limit or quota exceeded.
       content:
         application/json:
           schema:
@@ -273,12 +286,6 @@ components:
             $ref: '#/components/schemas/Error'
     BadRequest:
       description: The request was invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit or quota exceeded.
       content:
         application/json:
           schema:
@@ -305,13 +312,6 @@ components:
         - 2025-11-03.v1
         - 2026-02-18.v1
         - 2026-03-06.v1
-  schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message.
   securitySchemes:
     Bearer:
       type: http

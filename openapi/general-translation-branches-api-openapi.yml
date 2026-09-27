@@ -113,6 +113,20 @@ paths:
               schema:
                 type: string
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
+    Branch:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
   responses:
     Forbidden:
       description: The API key lacks the required permission, or the action is not allowed on the current plan.
@@ -154,20 +168,6 @@ components:
         - 2025-11-03.v1
         - 2026-02-18.v1
         - 2026-03-06.v1
-  schemas:
-    Branch:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message.
   securitySchemes:
     Bearer:
       type: http
