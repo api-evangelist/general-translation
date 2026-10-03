@@ -104,26 +104,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message.
   responses:
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid API key.
       content:
@@ -136,14 +117,26 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: The API key lacks the required permission, or the action is not allowed on the current plan.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
   parameters:
-    GtProjectId:
-      name: gt-project-id
-      in: header
-      required: false
-      description: Target project ID. Required when authenticating with an organization API key.
-      schema:
-        type: string
     GtApiVersion:
       name: gt-api-version
       in: header
@@ -158,6 +151,13 @@ components:
         - 2025-11-03.v1
         - 2026-02-18.v1
         - 2026-03-06.v1
+    GtProjectId:
+      name: gt-project-id
+      in: header
+      required: false
+      description: Target project ID. Required when authenticating with an organization API key.
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       type: http

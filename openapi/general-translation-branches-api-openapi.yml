@@ -113,6 +113,25 @@ paths:
               schema:
                 type: string
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: The API key lacks the required permission, or the action is not allowed on the current plan.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -127,33 +146,7 @@ components:
           type: string
         name:
           type: string
-  responses:
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
-    GtProjectId:
-      name: gt-project-id
-      in: header
-      required: false
-      description: Target project ID. Required when authenticating with an organization API key.
-      schema:
-        type: string
     GtApiVersion:
       name: gt-api-version
       in: header
@@ -168,6 +161,13 @@ components:
         - 2025-11-03.v1
         - 2026-02-18.v1
         - 2026-03-06.v1
+    GtProjectId:
+      name: gt-project-id
+      in: header
+      required: false
+      description: Target project ID. Required when authenticating with an organization API key.
+      schema:
+        type: string
   securitySchemes:
     Bearer:
       type: http
