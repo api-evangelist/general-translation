@@ -45,7 +45,7 @@ x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-09-16'
+modified: '2026-10-06'
 tags:
 - Company
 - Internationalization
@@ -147,6 +147,8 @@ apis:
   - type: OpenAPI
     url: openapi/general-translation-translation-api-openapi.yml
 common:
+- url: https://generaltranslation.com/rss.xml
+  type: BlogRSS
 - type: Overlay
   url: overlays/general-translation-openapi-overlay.yaml
 - type: PostmanWorkspace
