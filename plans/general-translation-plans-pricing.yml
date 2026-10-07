@@ -1,0 +1,36 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://generaltranslation.com/en-US/pricing
+sources:
+- https://generaltranslation.com/en-US/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: tiered-subscription
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+published: true
+note: Page shows a $0 Starter platform fee with usage-based billing (rates on a separate 'Usage Rates'
+  page not shown) and a Contact-us Enterprise tier.
+plan_count: 2
+currency: USD
+plans:
+- name: Starter
+  price_text: $0
+  price: 0
+  currency: USD
+  period: month
+  included_quota: Unlimited projects, Unlimited users, Unlimited languages, Translation Editor, GitHub
+    Integration, Locadex AI Agent
+  overage: Usage-based pricing
+- name: Enterprise
+  price_text: Contact us
+  period: none
+  included_quota: Unlimited projects, Unlimited users, Unlimited languages, Dedicated engineers, Custom
+    workflows, Security and governance
+  overage: Custom
