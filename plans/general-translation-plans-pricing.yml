@@ -34,3 +34,24 @@ plans:
   included_quota: Unlimited projects, Unlimited users, Unlimited languages, Dedicated engineers, Custom
     workflows, Security and governance
   overage: Custom
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Starter
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - none
