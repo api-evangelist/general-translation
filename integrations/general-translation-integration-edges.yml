@@ -1,0 +1,94 @@
+edges:
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/generaltranslation
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: generaltranslation
+      version: 9.5.7
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/generaltranslation
+      repo_leg: domain:generaltranslation.com
+      publisher_leg: email:generaltranslation.com
+      matched_by: domain
+    - name: gt-next
+      version: 11.4.12
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/gt-next
+      repo_leg: domain:generaltranslation.com
+      publisher_leg: email:generaltranslation.com
+      matched_by: domain
+    - name: gt-react
+      version: 11.4.12
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/gt-react
+      repo_leg: domain:generaltranslation.com
+      publisher_leg: email:generaltranslation.com
+      matched_by: domain
+    - name: gt-react-native
+      version: 11.4.12
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/gt-react-native
+      repo_leg: domain:generaltranslation.com
+      publisher_leg: email:generaltranslation.com
+      matched_by: domain
+    - name: gtx-cli
+      version: 2.26.5
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/gtx-cli
+      repo_leg: domain:generaltranslation.com
+      publisher_leg: email:generaltranslation.com
+      matched_by: domain
+    - name: locadex
+      version: 1.0.247
+      released: '2026-10-14'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/locadex
+      repo_leg: domain:generaltranslation.com
+      publisher_leg: email:generaltranslation.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
+generated: '2026-10-18'
+method: searched
+source:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
+checked:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
