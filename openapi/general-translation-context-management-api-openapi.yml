@@ -1,0 +1,3211 @@
+openapi: 3.2.0
+info:
+  title: General Translation Context Management API
+  version: 2026-03-06.v1
+  description: 'Translate content and manage projects with the General Translation API at `https://api.gtx.dev`.
+
+
+    Authenticate with `Authorization: Bearer `. Each endpoint lists its required permissions. Project keys (`gtx-api-`) access one project; Organization keys (`gtx-org-`) access projects in one Organization.
+
+
+    For project-scoped requests, use the project ID in the path. If you also send `gt-project-id`, it must match. Without a project ID in the path, project keys use their own project; Organization keys require `gt-project-id`. Discovery endpoints need no project ID. Organization-scoped requests use the Organization ID in the path. You must have access to the selected project or Organization.'
+  contact:
+    name: General Translation Support
+    email: support@generaltranslation.com
+    url: https://generaltranslation.com
+servers:
+- url: https://api.gtx.dev
+  description: General Translation API
+tags:
+- name: Context Management
+  description: Manage context groups, glossary terms, custom prompts, and project assignments.
+paths:
+  /v2/projects/{projectId}/context-groups:
+    get:
+      operationId: listProjectContextGroups
+      summary: List project context groups
+      description: Lists the groups assigned to the project, in priority order. Requires `org:context:read`. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Project ID.
+        required: true
+        description: Project ID.
+        name: projectId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of project context groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        groupId:
+                          type: string
+                        groupName:
+                          type: string
+                        priority:
+                          type: integer
+                          description: Lower values take precedence for duplicate terms.
+                      required:
+                      - groupId
+                      - groupName
+                      - priority
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/list-project-groups
+  /v2/projects/{projectId}/context-groups/{groupId}:
+    get:
+      operationId: getProjectContextGroup
+      summary: Get a project context group
+      description: 'Gets one assignment: the group''s ID, name and priority. Requires `org:context:read`.'
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Project ID.
+        required: true
+        description: Project ID.
+        name: projectId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Project assignment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groupId:
+                    type: string
+                  groupName:
+                    type: string
+                  priority:
+                    type: integer
+                    description: Lower values take precedence for duplicate terms.
+                required:
+                - groupId
+                - groupName
+                - priority
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/get-project-group
+    put:
+      operationId: assignContextGroup
+      summary: Assign a context group
+      description: Assigns the group to the project at the lowest priority (201). If it's already assigned, nothing changes (200), and repeating it never moves a group that was reordered. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Project ID.
+        required: true
+        description: Project ID.
+        name: projectId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Already assigned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  created:
+                    type: boolean
+                    description: False when the group was already assigned; nothing changed.
+                required:
+                - committed
+                - created
+        '201':
+          description: Context group assigned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  created:
+                    type: boolean
+                    description: False when the group was already assigned; nothing changed.
+                required:
+                - committed
+                - created
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/assign-group
+    delete:
+      operationId: unassignContextGroup
+      summary: Unassign a context group
+      description: Removes the assignment and keeps the group and its content. Does nothing if the group isn't assigned. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Project ID.
+        required: true
+        description: Project ID.
+        name: projectId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Assignment removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/unassign-group
+    patch:
+      operationId: reorderContextGroup
+      summary: Reorder a context group
+      description: Moves the assigned group to a new zero-based position. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Project ID.
+        required: true
+        description: Project ID.
+        name: projectId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetIndex:
+                  type: integer
+                  description: Zero-based position; out-of-range values move the group to the first or last position.
+              required:
+              - targetIndex
+              additionalProperties: false
+      responses:
+        '200':
+          description: Assignments reordered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/reorder-group
+  /v2/orgs/{orgId}/context-groups:
+    get:
+      operationId: listContextGroups
+      summary: List context groups
+      description: Lists the org's groups, ordered by ID. Requires `org:context:read`. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Organization ID.
+        required: true
+        description: Organization ID.
+        name: orgId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of context groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContextGroup'
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/list-groups
+    post:
+      operationId: createContextGroup
+      summary: Create a context group
+      description: Creates an empty, unassigned group. Each call creates a new one. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Organization ID.
+        required: true
+        description: Organization ID.
+        name: orgId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: Group name, 1–255 characters.
+              required:
+              - name
+              additionalProperties: false
+      responses:
+        '201':
+          description: Context group created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  groupId:
+                    type: string
+                required:
+                - committed
+                - groupId
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/create-group
+  /v2/context-groups/{groupId}:
+    get:
+      operationId: getContextGroup
+      summary: Get a context group
+      description: Gets the group's ID and name. Requires `org:context:read`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Context group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextGroup'
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/get-group
+    patch:
+      operationId: updateContextGroup
+      summary: Update a context group
+      description: Renames the group. The name is the only editable field. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: New group name, 1–255 characters.
+                autoUpdate:
+                  type: boolean
+                  description: Whether translation runs may add terms and context to this group automatically.
+              additionalProperties: false
+      responses:
+        '200':
+          description: Context group updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/update-group
+    delete:
+      operationId: deleteContextGroup
+      summary: Delete a context group
+      description: Deletes the group along with all its terms, custom prompts and project assignments. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Context group deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/delete-group
+  /v2/context-groups/{groupId}/glossary:
+    get:
+      operationId: listContextGlossary
+      summary: List glossary terms
+      description: Lists terms by ID, without translations. `keyword` is optional and matches the stored keyword exactly (case-sensitive), so it returns at most one term. Requires `org:context:read`. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Only the term whose stored keyword is exactly this value (case-sensitive).
+        required: false
+        description: Only the term whose stored keyword is exactly this value (case-sensitive).
+        name: keyword
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of glossary terms
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        keyword:
+                          type: string
+                        definition:
+                          type:
+                          - string
+                          - 'null'
+                        userDefined:
+                          type: boolean
+                      required:
+                      - id
+                      - keyword
+                      - definition
+                      - userDefined
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/list-glossary
+    post:
+      operationId: upsertContextGlossary
+      summary: Upsert glossary terms
+      description: 'Creates or updates 1–100 terms (`{ entries: [...] }`; send one term as a one-item array), matched by keyword, in one atomic batch. An absent field keeps its stored value. `null` clears a nullable field or removes a map entry; other fields reject `null`. In batches and imports, items match stored items by natural key, stored items absent from the batch are untouched, and nothing else is deleted. A blank CSV cell counts as absent. Repeating a keyword within one batch rejects the whole batch (400). Requires `org:context:write`.'
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entries:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      keyword:
+                        type: string
+                      userDefined:
+                        type: boolean
+                      definition:
+                        type:
+                        - string
+                        - 'null'
+                        description: null clears the definition.
+                      translations:
+                        type: object
+                        additionalProperties:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            translation:
+                              type: string
+                            userDefined:
+                              type: boolean
+                          required:
+                          - translation
+                          additionalProperties: false
+                        description: Translations by locale; null for a locale deletes its translation.
+                    required:
+                    - keyword
+                    additionalProperties: false
+                  minItems: 1
+                  maxItems: 100
+                  description: 1–100 terms, matched by keyword; a keyword may appear once.
+              required:
+              - entries
+              additionalProperties: false
+      responses:
+        '200':
+          description: Glossary terms written
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  counts:
+                    type: object
+                    properties:
+                      created:
+                        type: integer
+                      updated:
+                        type: integer
+                      unchanged:
+                        type: integer
+                    required:
+                    - created
+                    - updated
+                    - unchanged
+                required:
+                - committed
+                - counts
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/upsert-glossary
+  /v2/context-groups/{groupId}/glossary/{entryId}:
+    get:
+      operationId: getContextGlossaryEntry
+      summary: Get a glossary term
+      description: 'Gets a term by ID: its keyword and definition. Translations are listed separately. Requires `org:context:read`.'
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Glossary term ID.
+        required: true
+        description: Glossary term ID.
+        name: entryId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Glossary term
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  keyword:
+                    type: string
+                  definition:
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - keyword
+                - definition
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/get-glossary-entry
+    patch:
+      operationId: updateContextGlossaryEntry
+      summary: Update a glossary term
+      description: Updates the term's keyword or definition. An absent field keeps its stored value. `null` clears a nullable field or removes a map entry; other fields reject `null`. In batches and imports, items match stored items by natural key, stored items absent from the batch are untouched, and nothing else is deleted. A blank CSV cell counts as absent. The term ID and translations are kept when the keyword is renamed. Renaming to a keyword another term already has returns 409. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Glossary term ID.
+        required: true
+        description: Glossary term ID.
+        name: entryId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keyword:
+                  type: string
+                definition:
+                  type:
+                  - string
+                  - 'null'
+                  description: null clears the definition.
+              additionalProperties: false
+      responses:
+        '200':
+          description: Glossary term updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '409':
+          description: The request conflicts with existing data or the current state of the project or organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/update-glossary-entry
+    delete:
+      operationId: deleteContextGlossaryEntry
+      summary: Delete a glossary term
+      description: Deletes a term and all of its translations. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Glossary term ID.
+        required: true
+        description: Glossary term ID.
+        name: entryId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Glossary term deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/delete-glossary-entry
+  /v2/context-groups/{groupId}/glossary/{entryId}/translations:
+    get:
+      operationId: listContextGlossaryTranslations
+      summary: List term translations
+      description: Lists a term's translations by ID. Requires `org:context:read`. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Glossary term ID.
+        required: true
+        description: Glossary term ID.
+        name: entryId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of term translations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        locale:
+                          type: string
+                        translation:
+                          type: string
+                        userDefined:
+                          type: boolean
+                      required:
+                      - id
+                      - locale
+                      - translation
+                      - userDefined
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/list-glossary-translations
+  /v2/context-groups/{groupId}/glossary/{entryId}/translations/{locale}:
+    put:
+      operationId: setContextGlossaryTranslation
+      summary: Set a term translation
+      description: Creates or replaces one locale's translation (201 when created, 200 when replaced). Keeps the term and its other translations. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Glossary term ID.
+        required: true
+        description: Glossary term ID.
+        name: entryId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Translation locale.
+        required: true
+        description: Translation locale.
+        name: locale
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                translation:
+                  type: string
+                  description: The locale's translation of the term.
+              required:
+              - translation
+              additionalProperties: false
+      responses:
+        '200':
+          description: Translation replaced
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  outcome:
+                    type: string
+                    enum:
+                    - created
+                    - updated
+                    - unchanged
+                required:
+                - committed
+                - outcome
+        '201':
+          description: Translation created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  outcome:
+                    type: string
+                    enum:
+                    - created
+                    - updated
+                    - unchanged
+                required:
+                - committed
+                - outcome
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/set-glossary-translation
+    delete:
+      operationId: deleteContextGlossaryTranslation
+      summary: Delete a term translation
+      description: Deletes one locale's translation and keeps the term and its other translations. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Glossary term ID.
+        required: true
+        description: Glossary term ID.
+        name: entryId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Translation locale.
+        required: true
+        description: Translation locale.
+        name: locale
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Translation deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/delete-glossary-translation
+  /v2/context-groups/{groupId}/custom-prompts:
+    get:
+      operationId: listContextCustomPrompts
+      summary: List custom prompts
+      description: Lists prompts by ID. A null locale means the prompt applies to every locale. Requires `org:context:read`. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of custom prompts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        description:
+                          type:
+                          - string
+                          - 'null'
+                        locale:
+                          type:
+                          - string
+                          - 'null'
+                          description: Locale the prompt applies to; null applies to all locales.
+                        value:
+                          type: string
+                      required:
+                      - id
+                      - name
+                      - description
+                      - locale
+                      - value
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/list-custom-prompts
+    post:
+      operationId: upsertContextCustomPrompts
+      summary: Upsert custom prompts
+      description: 'Creates or updates 1–100 prompts (`{ customPrompts: [...] }`), each matched by name and locale, in one atomic batch. An absent field keeps its stored value. `null` clears a nullable field or removes a map entry; other fields reject `null`. In batches and imports, items match stored items by natural key, stored items absent from the batch are untouched, and nothing else is deleted. A blank CSV cell counts as absent. Repeating a name and locale within one batch rejects the whole batch (400). Requires `org:context:write`.'
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customPrompts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      locale:
+                        type:
+                        - string
+                        - 'null'
+                        description: Locale the prompt applies to; null applies it to every locale.
+                      value:
+                        type: string
+                      description:
+                        type:
+                        - string
+                        - 'null'
+                        description: null clears the description.
+                    required:
+                    - name
+                    - locale
+                    - value
+                    additionalProperties: false
+                  minItems: 1
+                  maxItems: 100
+                  description: 1–100 prompts, matched by name and locale; a name and locale may appear once.
+              required:
+              - customPrompts
+              additionalProperties: false
+      responses:
+        '200':
+          description: Custom prompts written
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  counts:
+                    type: object
+                    properties:
+                      created:
+                        type: integer
+                      updated:
+                        type: integer
+                      unchanged:
+                        type: integer
+                    required:
+                    - created
+                    - updated
+                    - unchanged
+                required:
+                - committed
+                - counts
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/upsert-custom-prompts
+  /v2/context-groups/{groupId}/custom-prompts/{customPromptId}:
+    patch:
+      operationId: updateContextCustomPrompt
+      summary: Update a custom prompt
+      description: Updates a prompt by ID. An absent field keeps its stored value. `null` clears a nullable field or removes a map entry; other fields reject `null`. In batches and imports, items match stored items by natural key, stored items absent from the batch are untouched, and nothing else is deleted. A blank CSV cell counts as absent. Returns 409 if another prompt already has the resulting name and locale. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Custom prompt ID.
+        required: true
+        description: Custom prompt ID.
+        name: customPromptId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                locale:
+                  type:
+                  - string
+                  - 'null'
+                  description: Locale the prompt applies to; null applies it to every locale.
+                value:
+                  type: string
+                description:
+                  type:
+                  - string
+                  - 'null'
+                  description: null clears the description.
+              additionalProperties: false
+      responses:
+        '200':
+          description: Custom prompt updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '409':
+          description: The request conflicts with existing data or the current state of the project or organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/update-custom-prompt
+    delete:
+      operationId: deleteContextCustomPrompt
+      summary: Delete a custom prompt
+      description: Deletes a prompt. Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Custom prompt ID.
+        required: true
+        description: Custom prompt ID.
+        name: customPromptId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Custom prompt deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                required:
+                - committed
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/delete-custom-prompt
+  /v2/context-groups/{groupId}/import:
+    post:
+      operationId: importContextContent
+      summary: Import context content
+      description: Merges one JSON or CSV transfer document of terms and custom prompts into the group as one atomic batch. The whole document is validated before anything is written. An absent field keeps its stored value. `null` clears a nullable field or removes a map entry; other fields reject `null`. In batches and imports, items match stored items by natural key, stored items absent from the batch are untouched, and nothing else is deleted. A blank CSV cell counts as absent. In CSV, a blank prompt locale means every locale, and the term, prompt name and prompt text can't be blank (400). Requires `org:context:write`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                format:
+                  type: string
+                  enum:
+                  - json
+                  - csv
+                  description: Transfer document format.
+                content:
+                  type: string
+                  description: 'One JSON or CSV transfer document, up to 1 MiB as a JSON string, so escaped quotes and line breaks count toward the limit. An exported page always fits. It is validated in full before anything is written. A JSON document has the shape `{ glossary: [{ keyword, definition?, translations?: { <locale>: { translation } | null } }], customPrompts: [{ name, locale, value, description? }] }`; definition, locale and description may be null. An absent field keeps its stored value. `null` clears a nullable field or removes a map entry; other fields reject `null`. In batches and imports, items match stored items by natural key, stored items absent from the batch are untouched, and nothing else is deleted. A blank CSV cell counts as absent.'
+              required:
+              - format
+              - content
+              additionalProperties: false
+      responses:
+        '200':
+          description: Content imported
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  committed:
+                    type: boolean
+                    enum:
+                    - true
+                  glossary:
+                    type: object
+                    properties:
+                      created:
+                        type: integer
+                      updated:
+                        type: integer
+                      unchanged:
+                        type: integer
+                    required:
+                    - created
+                    - updated
+                    - unchanged
+                  customPrompts:
+                    type: object
+                    properties:
+                      created:
+                        type: integer
+                      updated:
+                        type: integer
+                      unchanged:
+                        type: integer
+                    required:
+                    - created
+                    - updated
+                    - unchanged
+                required:
+                - committed
+                - glossary
+                - customPrompts
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/import-content
+  /v2/context-groups/{groupId}/export:
+    get:
+      operationId: exportContextContent
+      summary: Export context content
+      description: Exports the group's terms and custom prompts as paged transfer documents. Each page can be re-imported as one batch. Pass `nextCursor` as `cursor` until it is `null`. Pages aren't a snapshot, so changes made mid-export may be missed or included. Requires `org:context:read`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Context group ID.
+        required: true
+        description: Context group ID.
+        name: groupId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          type: string
+          enum:
+          - json
+          - csv
+          description: Transfer document format.
+        required: true
+        description: Transfer document format.
+        name: format
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of exported content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  format:
+                    type: string
+                    enum:
+                    - json
+                    - csv
+                    description: Transfer document format.
+                  content:
+                    type: string
+                    description: One self-contained transfer document that can be imported as a single batch.
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Pass as cursor for the next page; null ends the export.
+                required:
+                - format
+                - content
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Context Management
+      x-docs-slug: context-management/export-content
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+      - error
+    ApiVersion:
+      type: string
+      enum:
+      - 2025-01-01.v0
+      - 2025-11-03.v1
+      - 2026-02-18.v1
+      - 2026-03-06.v1
+      description: API contract version. Defaults to the oldest supported version.
+    ContextGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        autoUpdate:
+          type: boolean
+      required:
+      - id
+      - name
+      - autoUpdate
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Project or organization API key.
+x-docs-nav:
+- group: files
+  title: Files
+  pages:
+  - files/upload-source
+  - files/upload-translations
+  - files/submit-diffs
+  - files/download-many
+  - files/download
+  - files/publish-files
+  - files/file-info
+  - files/translation-status
+  - files/move-files
+  - files/orphaned-files
+- group: context
+  title: Context
+  pages:
+  - context/generate-context
+- group: context-management
+  title: Context Management
+  pages:
+  - context-management/list-groups
+  - context-management/create-group
+  - context-management/get-group
+  - context-management/update-group
+  - context-management/delete-group
+  - context-management/list-project-groups
+  - context-management/get-project-group
+  - context-management/assign-group
+  - context-management/unassign-group
+  - context-management/reorder-group
+  - context-management/list-glossary
+  - context-management/upsert-glossary
+  - context-management/get-glossary-entry
+  - context-management/update-glossary-entry
+  - context-management/delete-glossary-entry
+  - context-management/list-glossary-translations
+  - context-management/set-glossary-translation
+  - context-management/delete-glossary-translation
+  - context-management/list-custom-prompts
+  - context-management/upsert-custom-prompts
+  - context-management/update-custom-prompt
+  - context-management/delete-custom-prompt
+  - context-management/import-content
+  - context-management/export-content
+- group: translation
+  title: Translation
+  pages:
+  - translation/translate-runtime
+  - translation/queue
+  - translation/job-status
+- group: project
+  title: Project
+  pages:
+  - project/list-projects
+  - project/list-orgs
+  - project/create-project
+  - project/create-api-key
+  - project/project-info
+  - project/update-project
+  - project/upload-assets
+  - project/branch-info
+  - project/create-branch
+  - project/upsert-tag

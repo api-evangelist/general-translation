@@ -72,16 +72,6 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: general-translation:general-translation-branches-api
-  name: General Translation Branches API
-  description: Read and create project branches.
-  humanURL: https://generaltranslation.com/en-US/docs/api
-  baseURL: https://api2.gtx.dev
-  tags:
-  - Branches
-  properties:
-  - type: OpenAPI
-    url: openapi/general-translation-branches-api-openapi.yml
 - aid: general-translation:general-translation-context-api
   name: General Translation Context API
   description: Generate translation context such as glossaries and instructions.
@@ -104,18 +94,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/general-translation-files-api-openapi.yml
-- aid: general-translation:general-translation-jobs-api
-  name: General Translation Jobs API
-  description: Read background job status.
-  humanURL: https://generaltranslation.com/en-US/docs/api
-  baseURL: https://api2.gtx.dev
-  tags:
-  - Job
-  tags_raw:
-  - Jobs
-  properties:
-  - type: OpenAPI
-    url: openapi/general-translation-jobs-api-openapi.yml
 - aid: general-translation:general-translation-project-api
   name: General Translation Project API
   description: Read and update project information.
@@ -126,16 +104,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/general-translation-project-api-openapi.yml
-- aid: general-translation:general-translation-tags-api
-  name: General Translation Tags API
-  description: Tag file versions.
-  humanURL: https://generaltranslation.com/en-US/docs/api
-  baseURL: https://api2.gtx.dev
-  tags:
-  - Tags
-  properties:
-  - type: OpenAPI
-    url: openapi/general-translation-tags-api-openapi.yml
 - aid: general-translation:general-translation-translation-api
   name: General Translation API
   description: Translate content at runtime and queue files for translation.
@@ -146,6 +114,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/general-translation-translation-api-openapi.yml
+- aid: general-translation:general-translation-context-management-api
+  name: General Translation Context Management API
+  description: Manage context groups, glossary terms, custom prompts, and project assignments.
+  humanURL: https://generaltranslation.com/en-US/docs/api
+  baseURL: https://api2.gtx.dev
+  tags:
+  - Context Management
+  properties:
+  - type: OpenAPI
+    url: openapi/general-translation-context-management-api-openapi.yml
 common:
 - type: Plans
   url: plans/general-translation-plans-pricing.yml

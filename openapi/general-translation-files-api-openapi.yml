@@ -2,629 +2,64 @@ openapi: 3.2.0
 info:
   title: General Translation Files API
   version: 2026-03-06.v1
-  description: The public General Translation API.
+  description: 'Translate content and manage projects with the General Translation API at `https://api.gtx.dev`.
+
+
+    Authenticate with `Authorization: Bearer `. Each endpoint lists its required permissions. Project keys (`gtx-api-`) access one project; Organization keys (`gtx-org-`) access projects in one Organization.
+
+
+    For project-scoped requests, use the project ID in the path. If you also send `gt-project-id`, it must match. Without a project ID in the path, project keys use their own project; Organization keys require `gt-project-id`. Discovery endpoints need no project ID. Organization-scoped requests use the Organization ID in the path. You must have access to the selected project or Organization.'
   contact:
     name: General Translation Support
     email: support@generaltranslation.com
     url: https://generaltranslation.com
 servers:
-- url: https://api2.gtx.dev
-  description: Project and file API
-- url: https://runtime2.gtx.dev
-  description: Runtime translation API (POST /v2/translate)
-security:
-- Bearer: []
+- url: https://api.gtx.dev
+  description: General Translation API
 tags:
 - name: Files
   description: Upload, download, publish, move, and inspect project files.
 paths:
-  /v2/project/files/upload-files:
-    post:
-      tags:
-      - Files
-      summary: Upload source files
-      description: Upload one or more source files to the project. Max 100 files per request.
-      operationId: uploadSourceFiles
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - data
-              properties:
-                data:
-                  type: array
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: object
-                    required:
-                    - source
-                    properties:
-                      source:
-                        $ref: '#/components/schemas/SourceFileInput'
-                sourceLocale:
-                  type: string
-                  description: Overrides the project default source locale.
-                  example: en
-      responses:
-        '201':
-          description: Files uploaded.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  uploadedFiles:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        branchId:
-                          type: string
-                        fileId:
-                          type: string
-                        versionId:
-                          type: string
-                        fileName:
-                          type: string
-                        fileFormat:
-                          type: string
-                        dataFormat:
-                          type: string
-                  count:
-                    type: integer
-                  message:
-                    type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/RateLimited'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
-  /v2/project/files/upload-translations:
-    post:
-      tags:
-      - Files
-      summary: Upload translated files
-      description: Upload translated files linked to their source files. Max 100 files per request.
-      operationId: uploadTranslations
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - data
-              properties:
-                data:
-                  type: array
-                  minItems: 1
-                  maxItems: 100
-                  items:
-                    type: object
-                    required:
-                    - source
-                    - translations
-                    properties:
-                      source:
-                        $ref: '#/components/schemas/SourceFileInput'
-                      translations:
-                        type: array
-                        minItems: 1
-                        items:
-                          type: object
-                          required:
-                          - content
-                          - fileName
-                          - fileFormat
-                          - locale
-                          properties:
-                            content:
-                              type: string
-                              description: Base64-encoded translated file content.
-                            fileName:
-                              type: string
-                            fileFormat:
-                              type: string
-                            locale:
-                              type: string
-                            dataFormat:
-                              type: string
-                            transformFormat:
-                              type: string
-                              description: Output file format transformation.
-                sourceLocale:
-                  type: string
-                  description: Overrides the project default source locale.
-      responses:
-        '201':
-          description: Translations uploaded.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  uploadedFiles:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        branchId:
-                          type: string
-                        fileId:
-                          type: string
-                        versionId:
-                          type: string
-                        fileName:
-                          type: string
-                        locale:
-                          type: string
-                        fileFormat:
-                          type: string
-                        dataFormat:
-                          type: string
-                  count:
-                    type: integer
-                  message:
-                    type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/RateLimited'
-        '503':
-          $ref: '#/components/responses/ServiceUnavailable'
-  /v2/project/files/diffs:
-    post:
-      tags:
-      - Files
-      summary: Submit translation diffs
-      description: Overwrite translations with user-provided localized content.
-      operationId: submitDiffs
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - diffs
-              properties:
-                projectId:
-                  type: string
-                  description: Ignored. The project ID comes from the authenticated API key.
-                diffs:
-                  type: array
-                  minItems: 1
-                  items:
-                    type: object
-                    required:
-                    - locale
-                    - diff
-                    - versionId
-                    - fileId
-                    - localContent
-                    properties:
-                      locale:
-                        type: string
-                      diff:
-                        type: string
-                        description: Diff content.
-                      branchId:
-                        type: string
-                      versionId:
-                        type: string
-                      fileId:
-                        type: string
-                      localContent:
-                        type: string
-                        description: Localized file content that overwrites the stored translation.
-      responses:
-        '200':
-          description: Diffs processed.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  filesProcessed:
-                    type: integer
-                  entriesReceived:
-                    type: integer
-                  message:
-                    type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/RateLimited'
-  /v2/project/files/publish:
-    post:
-      tags:
-      - Files
-      summary: Publish or unpublish files
-      description: Publish or unpublish translated files to the CDN. Requires CDN to be enabled.
-      operationId: publishFiles
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - files
-              properties:
-                files:
-                  type: array
-                  minItems: 1
-                  items:
-                    type: object
-                    required:
-                    - fileId
-                    - versionId
-                    - publish
-                    properties:
-                      fileId:
-                        type: string
-                      versionId:
-                        type: string
-                      branchId:
-                        type: string
-                      publish:
-                        type: boolean
-                        description: True to publish, false to unpublish.
-      responses:
-        '200':
-          description: Publish results per file.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        fileId:
-                          type: string
-                        versionId:
-                          type: string
-                        locale:
-                          type: string
-                        branchId:
-                          type: string
-                        success:
-                          type: boolean
-                        error:
-                          type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-  /v2/project/files/download/{fileId}:
-    get:
-      tags:
-      - Files
-      summary: Download a single file
-      deprecated: true
-      description: Download a single source or translated file. Prefer the batch POST endpoint.
-      operationId: downloadFile
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      - name: fileId
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: versionId
-        in: query
-        schema:
-          type: string
-        description: Defaults to the branch head version.
-      - name: branchId
-        in: query
-        schema:
-          type: string
-        description: Defaults to the default branch.
-      - name: locale
-        in: query
-        schema:
-          type: string
-        description: Translation locale. Omit to download the source file.
-      responses:
-        '200':
-          description: File content.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: string
-                    description: Base64-encoded file content.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /v2/project/files/download:
-    post:
-      tags:
-      - Files
-      summary: Download multiple files
-      description: Download up to 100 source or translated files in one request.
-      operationId: downloadFiles
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              minItems: 1
-              maxItems: 100
-              items:
-                type: object
-                required:
-                - fileId
-                properties:
-                  fileId:
-                    type: string
-                  branchId:
-                    type: string
-                  versionId:
-                    type: string
-                  locale:
-                    type: string
-                    description: Translation locale. Omit for the source file.
-                  useLatestAvailableVersion:
-                    type: boolean
-      responses:
-        '200':
-          description: Downloaded files.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  files:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        branchId:
-                          type: string
-                        fileId:
-                          type: string
-                        versionId:
-                          type: string
-                        fileName:
-                          type: string
-                        data:
-                          type: string
-                          description: Base64-encoded content.
-                        metadata:
-                          type: object
-                          additionalProperties: true
-                        fileFormat:
-                          type: string
-                        locale:
-                          type: string
-                  count:
-                    type: integer
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-  /v2/project/files/info:
-    post:
-      tags:
-      - Files
-      summary: Get file metadata
-      description: Get detailed metadata for specific source and translated files.
-      operationId: getFileInfo
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                sourceFiles:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - fileId
-                    - versionId
-                    - branchId
-                    properties:
-                      fileId:
-                        type: string
-                      versionId:
-                        type: string
-                      branchId:
-                        type: string
-                translatedFiles:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - fileId
-                    - versionId
-                    - branchId
-                    - locale
-                    properties:
-                      fileId:
-                        type: string
-                      versionId:
-                        type: string
-                      branchId:
-                        type: string
-                      locale:
-                        type: string
-      responses:
-        '200':
-          description: File metadata.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  sourceFiles:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        branchId:
-                          type: string
-                        fileId:
-                          type: string
-                        versionId:
-                          type: string
-                        fileName:
-                          type: string
-                        fileFormat:
-                          type: string
-                        dataFormat:
-                          type:
-                          - string
-                          - 'null'
-                        createdAt:
-                          type: string
-                          format: date-time
-                        updatedAt:
-                          type: string
-                          format: date-time
-                        approvalRequiredAt:
-                          type:
-                          - string
-                          - 'null'
-                          format: date-time
-                        publishedAt:
-                          type:
-                          - string
-                          - 'null'
-                          format: date-time
-                        locales:
-                          type: array
-                          items:
-                            type: string
-                        sourceLocale:
-                          type: string
-                  translatedFiles:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        branchId:
-                          type: string
-                        fileId:
-                          type: string
-                        versionId:
-                          type: string
-                        fileFormat:
-                          type: string
-                        dataFormat:
-                          type:
-                          - string
-                          - 'null'
-                        createdAt:
-                          type: string
-                          format: date-time
-                        updatedAt:
-                          type: string
-                          format: date-time
-                        approvedAt:
-                          type:
-                          - string
-                          - 'null'
-                          format: date-time
-                        publishedAt:
-                          type:
-                          - string
-                          - 'null'
-                          format: date-time
-                        completedAt:
-                          type:
-                          - string
-                          - 'null'
-                          format: date-time
-                        locale:
-                          type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
   /v2/project/translations/files/status/{fileId}:
     get:
-      tags:
-      - Files
-      summary: Get translation status for a file
       operationId: getTranslationStatus
+      summary: Get translation status for a file
+      description: Return translation progress and availability by locale for one source file, along with its source metadata.
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      - name: fileId
-        in: path
+      - schema:
+          type: string
+          minLength: 1
         required: true
-        schema:
+        name: fileId
+        in: path
+      - schema:
           type: string
-      - name: versionId
+        required: false
+        name: versionId
         in: query
-        schema:
+      - schema:
           type: string
-        description: Defaults to the branch head version.
-      - name: branchId
+        required: false
+        name: branchId
         in: query
-        schema:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
           type: string
-        description: Defaults to the default branch.
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       responses:
         '200':
-          description: Translation status for the file.
+          description: Translation status
           content:
             application/json:
               schema:
@@ -662,6 +97,13 @@ paths:
                           - string
                           - 'null'
                           format: date-time
+                      required:
+                      - locale
+                      - completedAt
+                      - approvedAt
+                      - publishedAt
+                      - createdAt
+                      - updatedAt
                   sourceFile:
                     type: object
                     properties:
@@ -678,7 +120,7 @@ paths:
                       sourceLocale:
                         type: string
                       fileFormat:
-                        type: string
+                        $ref: '#/components/schemas/FileFormat'
                       dataFormat:
                         type:
                         - string
@@ -689,51 +131,262 @@ paths:
                       updatedAt:
                         type: string
                         format: date-time
-                      approvalRequiredAt:
-                        type:
-                        - string
-                        - 'null'
-                        format: date-time
                       locales:
                         type: array
                         items:
                           type: string
+                    required:
+                    - id
+                    - branchId
+                    - fileId
+                    - versionId
+                    - fileName
+                    - sourceLocale
+                    - fileFormat
+                    - dataFormat
+                    - createdAt
+                    - updatedAt
+                    - locales
+                required:
+                - translations
+                - sourceFile
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '404':
-          $ref: '#/components/responses/NotFound'
-  /v2/project/files/moves:
-    post:
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
       tags:
       - Files
-      summary: Move or rename files
-      description: Clone source files and their translations under new file IDs.
-      operationId: moveFiles
+      x-docs-slug: files/translation-status
+  /v2/project/files/diffs:
+    post:
+      operationId: submitUserEditDiffs
+      summary: Submit translation diffs
+      description: Overwrite translations with user-provided localized content.
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              properties:
+                projectId:
+                  type: string
+                diffs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      locale:
+                        type: string
+                        minLength: 1
+                      diff:
+                        type: string
+                      branchId:
+                        type: string
+                        minLength: 1
+                      versionId:
+                        type: string
+                        minLength: 1
+                      fileId:
+                        type: string
+                        minLength: 1
+                      localContent:
+                        type: string
+                    required:
+                    - locale
+                    - diff
+                    - versionId
+                    - fileId
+                    - localContent
+                  minItems: 1
               required:
-              - moves
+              - diffs
+      responses:
+        '200':
+          description: Processed user translation edits
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filesProcessed:
+                    type: integer
+                    minimum: 0
+                  entriesReceived:
+                    type: integer
+                    minimum: 0
+                  message:
+                    type: string
+                required:
+                - filesProcessed
+                - entriesReceived
+                - message
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/submit-diffs
+  /v2/project/files/moves:
+    post:
+      operationId: processFileMoves
+      summary: Move or rename files
+      description: Clone source files and their translations under new file IDs.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
               properties:
                 branchId:
                   type: string
-                  description: Defaults to the default branch.
                 moves:
                   type: array
                   items:
                     type: object
-                    required:
-                    - oldFileId
-                    - newFileId
-                    - newFileName
                     properties:
                       oldFileId:
                         type: string
@@ -744,9 +397,15 @@ paths:
                       newFileName:
                         type: string
                         minLength: 1
+                    required:
+                    - oldFileId
+                    - newFileId
+                    - newFileName
+              required:
+              - moves
       responses:
         '200':
-          description: Move results.
+          description: File move results
           content:
             application/json:
               schema:
@@ -763,54 +422,150 @@ paths:
                           type: string
                         success:
                           type: boolean
+                        newSourceFileId:
+                          type: string
+                        clonedTranslationsCount:
+                          type: integer
                         error:
                           type: string
+                      required:
+                      - oldFileId
+                      - newFileId
+                      - success
                   summary:
                     type: object
                     properties:
                       total:
                         type: integer
+                        minimum: 0
                       succeeded:
                         type: integer
+                        minimum: 0
                       failed:
                         type: integer
+                        minimum: 0
+                    required:
+                    - total
+                    - succeeded
+                    - failed
+                required:
+                - results
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '404':
-          $ref: '#/components/responses/NotFound'
-  /v2/project/files/orphaned:
-    post:
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
       tags:
       - Files
+      x-docs-slug: files/move-files
+  /v2/project/files/orphaned:
+    post:
+      operationId: getOrphanedFiles
       summary: Find orphaned files
       description: Return files on a branch that are not present in the provided file ID list.
-      operationId: getOrphanedFiles
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-              - branchId
               properties:
                 branchId:
                   type: string
+                  minLength: 1
                 fileIds:
                   type: array
-                  default: []
                   items:
                     type: string
+                  default: []
+              required:
+              - branchId
       responses:
         '200':
-          description: Orphaned files.
+          description: Files present on the branch but absent from the request
           content:
             application/json:
               schema:
@@ -827,123 +582,1438 @@ paths:
                           type: string
                         fileName:
                           type: string
+                      required:
+                      - fileId
+                      - versionId
+                      - fileName
+                required:
+                - orphanedFiles
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '404':
-          $ref: '#/components/responses/NotFound'
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/orphaned-files
+  /v2/project/files/info:
+    post:
+      operationId: getFileInfo
+      summary: Get file metadata
+      description: Get detailed metadata for specific source and translated files.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceFiles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fileId:
+                        type: string
+                        minLength: 1
+                      versionId:
+                        type: string
+                        minLength: 1
+                      branchId:
+                        type: string
+                        minLength: 1
+                    required:
+                    - fileId
+                    - versionId
+                    - branchId
+                translatedFiles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fileId:
+                        type: string
+                        minLength: 1
+                      versionId:
+                        type: string
+                        minLength: 1
+                      branchId:
+                        type: string
+                        minLength: 1
+                      locale:
+                        type: string
+                        minLength: 1
+                    required:
+                    - fileId
+                    - versionId
+                    - branchId
+                    - locale
+      responses:
+        '200':
+          description: File information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sourceFiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        branchId:
+                          type: string
+                        fileId:
+                          type: string
+                        versionId:
+                          type: string
+                        fileName:
+                          type: string
+                        fileFormat:
+                          $ref: '#/components/schemas/FileFormat'
+                        dataFormat:
+                          type:
+                          - string
+                          - 'null'
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                        publishedAt:
+                          type:
+                          - string
+                          - 'null'
+                          format: date-time
+                        locales:
+                          type: array
+                          items:
+                            type: string
+                        sourceLocale:
+                          type: string
+                      required:
+                      - branchId
+                      - fileId
+                      - versionId
+                      - fileName
+                      - fileFormat
+                      - dataFormat
+                      - createdAt
+                      - updatedAt
+                      - publishedAt
+                      - locales
+                      - sourceLocale
+                  translatedFiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        branchId:
+                          type: string
+                        fileId:
+                          type: string
+                        versionId:
+                          type: string
+                        fileFormat:
+                          $ref: '#/components/schemas/FileFormat'
+                        dataFormat:
+                          type:
+                          - string
+                          - 'null'
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+                        approvedAt:
+                          type:
+                          - string
+                          - 'null'
+                          format: date-time
+                        publishedAt:
+                          type:
+                          - string
+                          - 'null'
+                          format: date-time
+                        completedAt:
+                          type:
+                          - string
+                          - 'null'
+                          format: date-time
+                        locale:
+                          type: string
+                      required:
+                      - branchId
+                      - fileId
+                      - versionId
+                      - fileFormat
+                      - dataFormat
+                      - createdAt
+                      - updatedAt
+                      - approvedAt
+                      - publishedAt
+                      - completedAt
+                      - locale
+                required:
+                - sourceFiles
+                - translatedFiles
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/file-info
+  /v2/project/files/download:
+    post:
+      operationId: downloadFiles
+      summary: Download multiple files
+      description: Download up to 100 source or translated files in one request.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  fileId:
+                    type: string
+                    minLength: 1
+                  branchId:
+                    type: string
+                    minLength: 1
+                  versionId:
+                    type: string
+                    minLength: 1
+                  locale:
+                    type: string
+                    minLength: 1
+                  useLatestAvailableVersion:
+                    type: boolean
+                required:
+                - fileId
+              minItems: 1
+              maxItems: 100
+      responses:
+        '200':
+          description: Downloaded files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        branchId:
+                          type: string
+                        fileId:
+                          type: string
+                        versionId:
+                          type: string
+                        locale:
+                          type: string
+                        fileName:
+                          type: string
+                        data:
+                          type: string
+                        metadata:
+                          $ref: '#/components/schemas/JsonObject'
+                        fileFormat:
+                          $ref: '#/components/schemas/FileFormat'
+                      required:
+                      - id
+                      - branchId
+                      - fileId
+                      - versionId
+                      - data
+                      - metadata
+                      - fileFormat
+                  count:
+                    type: number
+                  pending:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        branchId:
+                          type: string
+                        fileId:
+                          type: string
+                        locale:
+                          type: string
+                        versionId:
+                          type: string
+                      required:
+                      - branchId
+                      - fileId
+                      - locale
+                      - versionId
+                required:
+                - files
+                - count
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/download-many
+  /v2/project/files/download/{fileId}:
+    get:
+      operationId: downloadFile
+      summary: Download a single file
+      deprecated: true
+      description: Download a single source or translated file. This deprecated endpoint is retained for backward compatibility; new integrations should use `POST /v2/project/files/download`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+        required: true
+        name: fileId
+        in: path
+      - schema:
+          type: string
+        required: false
+        name: branchId
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: versionId
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: locale
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      responses:
+        '200':
+          description: Downloaded file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                required:
+                - data
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '425':
+          description: The requested translation has not finished yet. Retry later.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/download
+  /v2/project/files/publish:
+    post:
+      operationId: publishFiles
+      summary: Publish or unpublish files
+      description: Publish or unpublish translated files to the CDN. Requires CDN to be enabled.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fileId:
+                        type: string
+                        minLength: 1
+                      versionId:
+                        type: string
+                        minLength: 1
+                      branchId:
+                        type: string
+                        minLength: 1
+                      publish:
+                        type: boolean
+                    required:
+                    - fileId
+                    - versionId
+                    - publish
+                  minItems: 1
+              required:
+              - files
+      responses:
+        '200':
+          description: File publish results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        fileId:
+                          type: string
+                        versionId:
+                          type: string
+                        locale:
+                          type: string
+                        branchId:
+                          type: string
+                        success:
+                          type: boolean
+                        error:
+                          type: string
+                      required:
+                      - fileId
+                      - versionId
+                      - branchId
+                      - success
+                required:
+                - results
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/publish-files
+  /v2/project/files/upload-files:
+    post:
+      operationId: uploadSourceFiles
+      summary: Upload source files
+      description: Upload one or more source files to the project. Max 100 files per request.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      source:
+                        type: object
+                        properties:
+                          content:
+                            type: string
+                          fileName:
+                            type: string
+                            minLength: 1
+                          fileFormat:
+                            type: string
+                            enum:
+                            - GTJSON
+                            - MDX
+                            - JSON
+                            - YAML
+                            - MD
+                            - TS
+                            - JS
+                            - HTML
+                            - TXT
+                            - PO
+                            - POT
+                            - TWILIO_CONTENT_JSON
+                            - LOTTIE
+                            - SVG
+                            - XCSTRINGS
+                            - DOT_STRINGS
+                            - DOT_STRINGSDICT
+                            - ANDROID_STRINGS
+                            - SRT
+                            - RESX
+                          dataFormat:
+                            type: string
+                          locale:
+                            type: string
+                            minLength: 1
+                          fileId:
+                            type: string
+                            minLength: 1
+                          versionId:
+                            type: string
+                            minLength: 1
+                          branchId:
+                            type: string
+                            minLength: 1
+                          checkedOutBranchId:
+                            type: string
+                            minLength: 1
+                          incomingBranchId:
+                            type: string
+                            minLength: 1
+                          formatMetadata:
+                            type: object
+                            additionalProperties: {}
+                        required:
+                        - content
+                        - fileName
+                        - fileFormat
+                        - locale
+                    required:
+                    - source
+                  minItems: 1
+                  maxItems: 100
+                sourceLocale:
+                  type: string
+              required:
+              - data
+      responses:
+        '201':
+          description: Uploaded source files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uploadedFiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        branchId:
+                          type: string
+                        fileId:
+                          type: string
+                        versionId:
+                          type: string
+                        fileName:
+                          type: string
+                        fileFormat:
+                          $ref: '#/components/schemas/FileFormat'
+                        dataFormat:
+                          $ref: '#/components/schemas/DataFormat'
+                        locale:
+                          type: string
+                      required:
+                      - branchId
+                      - fileId
+                      - versionId
+                      - fileName
+                      - fileFormat
+                  count:
+                    type: number
+                  message:
+                    type: string
+                required:
+                - uploadedFiles
+                - count
+                - message
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '503':
+          description: The server is too busy to process the uploaded files. Retry later.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/upload-source
+  /v2/project/files/upload-translations:
+    post:
+      operationId: uploadTranslations
+      summary: Upload translated files
+      description: Upload translated files linked to their source files. Max 100 files per request.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      source:
+                        type: object
+                        properties:
+                          content:
+                            type: string
+                          fileName:
+                            type: string
+                            minLength: 1
+                          fileFormat:
+                            type: string
+                            enum:
+                            - GTJSON
+                            - MDX
+                            - JSON
+                            - YAML
+                            - MD
+                            - TS
+                            - JS
+                            - HTML
+                            - TXT
+                            - PO
+                            - POT
+                            - TWILIO_CONTENT_JSON
+                            - LOTTIE
+                            - SVG
+                            - XCSTRINGS
+                            - DOT_STRINGS
+                            - DOT_STRINGSDICT
+                            - ANDROID_STRINGS
+                            - SRT
+                            - RESX
+                          dataFormat:
+                            type: string
+                          locale:
+                            type: string
+                            minLength: 1
+                          fileId:
+                            type: string
+                            minLength: 1
+                          versionId:
+                            type: string
+                            minLength: 1
+                          branchId:
+                            type: string
+                            minLength: 1
+                          checkedOutBranchId:
+                            type: string
+                            minLength: 1
+                          incomingBranchId:
+                            type: string
+                            minLength: 1
+                          formatMetadata:
+                            type: object
+                            additionalProperties: {}
+                        required:
+                        - content
+                        - fileName
+                        - fileFormat
+                        - locale
+                      translations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            content:
+                              type: string
+                            fileName:
+                              type: string
+                              minLength: 1
+                            fileFormat:
+                              type: string
+                              enum:
+                              - GTJSON
+                              - MDX
+                              - JSON
+                              - YAML
+                              - MD
+                              - TS
+                              - JS
+                              - HTML
+                              - TXT
+                              - PO
+                              - POT
+                              - TWILIO_CONTENT_JSON
+                              - LOTTIE
+                              - SVG
+                              - XCSTRINGS
+                              - DOT_STRINGS
+                              - DOT_STRINGSDICT
+                              - ANDROID_STRINGS
+                              - SRT
+                              - RESX
+                            dataFormat:
+                              type: string
+                            locale:
+                              type: string
+                              minLength: 1
+                            transformFormat:
+                              type: string
+                              enum:
+                              - GTJSON
+                              - MDX
+                              - JSON
+                              - YAML
+                              - MD
+                              - TS
+                              - JS
+                              - HTML
+                              - TXT
+                              - PO
+                              - POT
+                              - TWILIO_CONTENT_JSON
+                              - LOTTIE
+                              - SVG
+                              - XCSTRINGS
+                              - DOT_STRINGS
+                              - DOT_STRINGSDICT
+                              - ANDROID_STRINGS
+                              - SRT
+                              - RESX
+                          required:
+                          - content
+                          - fileName
+                          - fileFormat
+                          - locale
+                        minItems: 1
+                    required:
+                    - source
+                    - translations
+                  minItems: 1
+                  maxItems: 100
+                sourceLocale:
+                  type: string
+              required:
+              - data
+      responses:
+        '201':
+          description: Uploaded translation files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uploadedFiles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        branchId:
+                          type: string
+                        fileId:
+                          type: string
+                        versionId:
+                          type: string
+                        fileName:
+                          type: string
+                        fileFormat:
+                          $ref: '#/components/schemas/FileFormat'
+                        dataFormat:
+                          $ref: '#/components/schemas/DataFormat'
+                        locale:
+                          type: string
+                      required:
+                      - branchId
+                      - fileId
+                      - versionId
+                      - fileName
+                      - fileFormat
+                  count:
+                    type: number
+                  message:
+                    type: string
+                required:
+                - uploadedFiles
+                - count
+                - message
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '503':
+          description: The server is too busy to process the uploaded files. Retry later.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Files
+      x-docs-slug: files/upload-translations
 components:
-  responses:
-    RateLimited:
-      description: Rate limit or quota exceeded.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ServiceUnavailable:
-      description: The server is temporarily busy.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    GtApiVersion:
-      name: gt-api-version
-      in: header
-      required: false
-      description: 'API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.
-
-        '
-      schema:
-        type: string
-        enum:
-        - 2025-01-01.v0
-        - 2025-11-03.v1
-        - 2026-02-18.v1
-        - 2026-03-06.v1
-    GtProjectId:
-      name: gt-project-id
-      in: header
-      required: false
-      description: Target project ID. Required when authenticating with an organization API key.
-      schema:
-        type: string
   schemas:
-    Error:
+    ApiVersion:
+      type: string
+      enum:
+      - 2025-01-01.v0
+      - 2025-11-03.v1
+      - 2026-02-18.v1
+      - 2026-03-06.v1
+      description: API contract version. Defaults to the oldest supported version.
+    ErrorResponse:
       type: object
       properties:
         error:
           type: string
-          description: Human-readable error message.
-    SourceFileInput:
-      type: object
       required:
-      - content
-      - fileName
-      - fileFormat
-      - locale
-      properties:
-        content:
-          type: string
-          description: Base64-encoded file content.
-        fileName:
-          type: string
-        fileFormat:
-          type: string
-          description: File format, e.g. json, yaml, xml.
-        dataFormat:
-          type: string
-          description: Data format, e.g. STRING, JSX, ICU.
-        locale:
-          type: string
-          description: Source locale code.
-        fileId:
-          type: string
-          description: Derived from the file name when omitted.
-        versionId:
-          type: string
-          description: Derived from the content hash when omitted.
-        branchId:
-          type: string
-          description: Defaults to the default branch.
-        checkedOutBranchId:
-          type: string
-        incomingBranchId:
-          type: string
-        formatMetadata:
-          type: object
-          additionalProperties: true
+      - error
+    JsonObject:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/JsonValue'
+    JsonValue:
+      anyOf:
+      - type: string
+      - type: number
+      - type: boolean
+      - type: 'null'
+      - type: array
+        items:
+          oneOf:
+          - $ref: '#/components/schemas/JsonValue'
+          - type: 'null'
+      - type: object
+        additionalProperties:
+          oneOf:
+          - $ref: '#/components/schemas/JsonValue'
+          - type: 'null'
+    FileFormat:
+      type: string
+      enum:
+      - GTJSON
+      - MDX
+      - JSON
+      - YAML
+      - MD
+      - TS
+      - JS
+      - HTML
+      - TXT
+      - PO
+      - POT
+      - TWILIO_CONTENT_JSON
+      - LOTTIE
+      - SVG
+      - XCSTRINGS
+      - DOT_STRINGS
+      - DOT_STRINGSDICT
+      - ANDROID_STRINGS
+      - SRT
+      - RESX
+    DataFormat:
+      type: string
+      enum:
+      - JSX
+      - ICU
+      - I18NEXT
+      - STRING
   securitySchemes:
-    Bearer:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: 'API key sent as a bearer token in the standard `Authorization: Bearer <key>` header. Use a project key (`gtx-api-`, `gtx-dev-`) or an organization key (`gtx-org-`). Organization keys must also send `gt-project-id` on project-scoped routes.
-
-        '
+      description: Project or organization API key.
+x-docs-nav:
+- group: files
+  title: Files
+  pages:
+  - files/upload-source
+  - files/upload-translations
+  - files/submit-diffs
+  - files/download-many
+  - files/download
+  - files/publish-files
+  - files/file-info
+  - files/translation-status
+  - files/move-files
+  - files/orphaned-files
+- group: context
+  title: Context
+  pages:
+  - context/generate-context
+- group: context-management
+  title: Context Management
+  pages:
+  - context-management/list-groups
+  - context-management/create-group
+  - context-management/get-group
+  - context-management/update-group
+  - context-management/delete-group
+  - context-management/list-project-groups
+  - context-management/get-project-group
+  - context-management/assign-group
+  - context-management/unassign-group
+  - context-management/reorder-group
+  - context-management/list-glossary
+  - context-management/upsert-glossary
+  - context-management/get-glossary-entry
+  - context-management/update-glossary-entry
+  - context-management/delete-glossary-entry
+  - context-management/list-glossary-translations
+  - context-management/set-glossary-translation
+  - context-management/delete-glossary-translation
+  - context-management/list-custom-prompts
+  - context-management/upsert-custom-prompts
+  - context-management/update-custom-prompt
+  - context-management/delete-custom-prompt
+  - context-management/import-content
+  - context-management/export-content
+- group: translation
+  title: Translation
+  pages:
+  - translation/translate-runtime
+  - translation/queue
+  - translation/job-status
+- group: project
+  title: Project
+  pages:
+  - project/list-projects
+  - project/list-orgs
+  - project/create-project
+  - project/create-api-key
+  - project/project-info
+  - project/update-project
+  - project/upload-assets
+  - project/branch-info
+  - project/create-branch
+  - project/upsert-tag

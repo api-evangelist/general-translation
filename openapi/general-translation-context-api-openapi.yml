@@ -2,207 +2,263 @@ openapi: 3.2.0
 info:
   title: General Translation Context API
   version: 2026-03-06.v1
-  description: The public General Translation API.
+  description: 'Translate content and manage projects with the General Translation API at `https://api.gtx.dev`.
+
+
+    Authenticate with `Authorization: Bearer `. Each endpoint lists its required permissions. Project keys (`gtx-api-`) access one project; Organization keys (`gtx-org-`) access projects in one Organization.
+
+
+    For project-scoped requests, use the project ID in the path. If you also send `gt-project-id`, it must match. Without a project ID in the path, project keys use their own project; Organization keys require `gt-project-id`. Discovery endpoints need no project ID. Organization-scoped requests use the Organization ID in the path. You must have access to the selected project or Organization.'
   contact:
     name: General Translation Support
     email: support@generaltranslation.com
     url: https://generaltranslation.com
 servers:
-- url: https://api2.gtx.dev
-  description: Project and file API
-- url: https://runtime2.gtx.dev
-  description: Runtime translation API (POST /v2/translate)
-security:
-- Bearer: []
+- url: https://api.gtx.dev
+  description: General Translation API
 tags:
 - name: Context
   description: Generate translation context such as glossaries and instructions.
 paths:
-  /v2/project/setup/should-generate:
-    get:
-      tags:
-      - Context
-      summary: Check if context generation is needed
-      deprecated: true
-      operationId: shouldGenerateContext
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      responses:
-        '200':
-          description: Whether context generation is recommended.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  shouldSetupProject:
-                    type: boolean
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
   /v2/project/setup/generate:
     post:
-      tags:
-      - Context
+      operationId: generateProjectContext
       summary: Generate translation context
       description: Generate glossaries and translation instructions for the project.
-      operationId: generateContext
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-              - files
               properties:
                 files:
                   type: array
-                  minItems: 1
                   items:
                     type: object
-                    required:
-                    - fileId
-                    - versionId
                     properties:
                       branchId:
                         type: string
+                        minLength: 1
                       fileId:
                         type: string
+                        minLength: 1
                       versionId:
                         type: string
+                        minLength: 1
+                    required:
+                    - fileId
+                    - versionId
+                  minItems: 1
                 locales:
                   type: array
                   items:
                     type: string
-                  description: Target locales for glossary generation.
                 force:
                   type: boolean
                   default: false
+              required:
+              - files
       responses:
         '200':
-          description: Context generation queued or completed.
+          description: Context generation status
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  setupJobId:
-                    type: string
-                  status:
-                    type: string
-                    enum:
-                    - queued
-                    - completed
+                anyOf:
+                - type: object
+                  properties:
+                    status:
+                      type: string
+                      enum:
+                      - completed
+                  required:
+                  - status
+                - type: object
+                  properties:
+                    setupJobId:
+                      type: string
+                    status:
+                      type: string
+                      enum:
+                      - queued
+                  required:
+                  - setupJobId
+                  - status
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
-  /v2/project/setup/status/{jobId}:
-    get:
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
       tags:
       - Context
-      summary: Get context generation job status
-      deprecated: true
-      operationId: getContextStatus
-      parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      - name: jobId
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: Context job status.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  jobId:
-                    type: string
-                  status:
-                    type: string
-                    enum:
-                    - queued
-                    - processing
-                    - completed
-                    - failed
-                    - unknown
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+      x-docs-slug: context/generate-context
 components:
-  parameters:
-    GtApiVersion:
-      name: gt-api-version
-      in: header
-      required: false
-      description: 'API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.
-
-        '
-      schema:
-        type: string
-        enum:
-        - 2025-01-01.v0
-        - 2025-11-03.v1
-        - 2026-02-18.v1
-        - 2026-03-06.v1
-    GtProjectId:
-      name: gt-project-id
-      in: header
-      required: false
-      description: Target project ID. Required when authenticating with an organization API key.
-      schema:
-        type: string
-  responses:
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    ErrorResponse:
       type: object
       properties:
         error:
           type: string
-          description: Human-readable error message.
+      required:
+      - error
+    ApiVersion:
+      type: string
+      enum:
+      - 2025-01-01.v0
+      - 2025-11-03.v1
+      - 2026-02-18.v1
+      - 2026-03-06.v1
+      description: API contract version. Defaults to the oldest supported version.
   securitySchemes:
-    Bearer:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: 'API key sent as a bearer token in the standard `Authorization: Bearer <key>` header. Use a project key (`gtx-api-`, `gtx-dev-`) or an organization key (`gtx-org-`). Organization keys must also send `gt-project-id` on project-scoped routes.
-
-        '
+      description: Project or organization API key.
+x-docs-nav:
+- group: files
+  title: Files
+  pages:
+  - files/upload-source
+  - files/upload-translations
+  - files/submit-diffs
+  - files/download-many
+  - files/download
+  - files/publish-files
+  - files/file-info
+  - files/translation-status
+  - files/move-files
+  - files/orphaned-files
+- group: context
+  title: Context
+  pages:
+  - context/generate-context
+- group: context-management
+  title: Context Management
+  pages:
+  - context-management/list-groups
+  - context-management/create-group
+  - context-management/get-group
+  - context-management/update-group
+  - context-management/delete-group
+  - context-management/list-project-groups
+  - context-management/get-project-group
+  - context-management/assign-group
+  - context-management/unassign-group
+  - context-management/reorder-group
+  - context-management/list-glossary
+  - context-management/upsert-glossary
+  - context-management/get-glossary-entry
+  - context-management/update-glossary-entry
+  - context-management/delete-glossary-entry
+  - context-management/list-glossary-translations
+  - context-management/set-glossary-translation
+  - context-management/delete-glossary-translation
+  - context-management/list-custom-prompts
+  - context-management/upsert-custom-prompts
+  - context-management/update-custom-prompt
+  - context-management/delete-custom-prompt
+  - context-management/import-content
+  - context-management/export-content
+- group: translation
+  title: Translation
+  pages:
+  - translation/translate-runtime
+  - translation/queue
+  - translation/job-status
+- group: project
+  title: Project
+  pages:
+  - project/list-projects
+  - project/list-orgs
+  - project/create-project
+  - project/create-api-key
+  - project/project-info
+  - project/update-project
+  - project/upload-assets
+  - project/branch-info
+  - project/create-branch
+  - project/upsert-tag

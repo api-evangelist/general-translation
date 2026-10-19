@@ -2,40 +2,55 @@ openapi: 3.2.0
 info:
   title: General Translation Project API
   version: 2026-03-06.v1
-  description: The public General Translation API.
+  description: 'Translate content and manage projects with the General Translation API at `https://api.gtx.dev`.
+
+
+    Authenticate with `Authorization: Bearer `. Each endpoint lists its required permissions. Project keys (`gtx-api-`) access one project; Organization keys (`gtx-org-`) access projects in one Organization.
+
+
+    For project-scoped requests, use the project ID in the path. If you also send `gt-project-id`, it must match. Without a project ID in the path, project keys use their own project; Organization keys require `gt-project-id`. Discovery endpoints need no project ID. Organization-scoped requests use the Organization ID in the path. You must have access to the selected project or Organization.'
   contact:
     name: General Translation Support
     email: support@generaltranslation.com
     url: https://generaltranslation.com
 servers:
-- url: https://api2.gtx.dev
-  description: Project and file API
-- url: https://runtime2.gtx.dev
-  description: Runtime translation API (POST /v2/translate)
-security:
-- Bearer: []
+- url: https://api.gtx.dev
+  description: General Translation API
 tags:
 - name: Project
-  description: Read and update project information.
+  description: Create and manage projects, assets, branches, and file version tags.
 paths:
   /v2/project/info/{projectId}:
     get:
-      tags:
-      - Project
-      summary: Get project information
       operationId: getProjectInfo
+      summary: Get Project information
+      description: Get a project's ID, name, Organization, locales, and auto-approval setting. No permission is needed beyond access to the project.
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      - name: projectId
-        in: path
-        required: true
-        schema:
+      - schema:
           type: string
-        description: Must match the authenticated project.
+          minLength: 1
+          maxLength: 128
+        required: true
+        name: projectId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       responses:
         '200':
-          description: Project information.
+          description: Project information
           content:
             application/json:
               schema:
@@ -53,29 +68,99 @@ paths:
                     type: array
                     items:
                       type: string
+                  autoApprove:
+                    type: boolean
+                required:
+                - id
+                - name
+                - orgId
+                - defaultLocale
+                - currentLocales
+                - autoApprove
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '404':
-          $ref: '#/components/responses/NotFound'
-    post:
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
       tags:
       - Project
-      summary: Update project information
-      description: Update project settings such as the default locale.
+      x-docs-slug: project/project-info
+    post:
       operationId: updateProjectInfo
+      summary: Update Project information
+      description: Update a project's default locale or CDN delivery setting. Requires `project:write`. Omitted settings remain unchanged.
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
-      - name: projectId
-        in: path
-        required: true
-        schema:
+      - schema:
           type: string
-        description: Must match the authenticated project.
+          minLength: 1
+          maxLength: 128
+        required: true
+        name: projectId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       requestBody:
         required: true
         content:
@@ -85,9 +170,11 @@ paths:
               properties:
                 defaultLocale:
                   type: string
+                cdnEnabled:
+                  type: boolean
       responses:
         '200':
-          description: Project updated.
+          description: Project settings updated
           content:
             application/json:
               schema:
@@ -95,73 +182,1273 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    enum:
+                    - true
+                required:
+                - success
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '404':
-          $ref: '#/components/responses/NotFound'
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/update-project
+  /v2/project/branches/info:
+    post:
+      operationId: getBranchInfo
+      summary: Get branch information
+      description: Return the Project's default branch and any branches requested by name.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branchNames:
+                  type: array
+                  items:
+                    type: string
+                  default: []
+      responses:
+        '200':
+          description: Branch information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  branches:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Branch'
+                  defaultBranch:
+                    allOf:
+                    - $ref: '#/components/schemas/Branch'
+                    - type:
+                      - object
+                      - 'null'
+                required:
+                - branches
+                - defaultBranch
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/branch-info
+  /v2/project/branches/create:
+    post:
+      operationId: createBranch
+      summary: Create a branch
+      description: Create a new branch, or rename and confirm the default branch.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branchName:
+                  type: string
+                  minLength: 1
+                defaultBranch:
+                  type: boolean
+                  default: false
+              required:
+              - branchName
+      responses:
+        '200':
+          description: Created or existing branch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  branch:
+                    $ref: '#/components/schemas/Branch'
+                required:
+                - branch
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '409':
+          description: The request conflicts with existing data or the current state of the project or organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/create-branch
+  /v2/project/tags/create:
+    post:
+      operationId: createTag
+      summary: Create or update a tag
+      description: Create or update a tag for a set of file versions.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tagId:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fileId:
+                        type: string
+                        minLength: 1
+                      versionId:
+                        type: string
+                        minLength: 1
+                      branchId:
+                        type: string
+                        minLength: 1
+                    required:
+                    - fileId
+                    - versionId
+                    - branchId
+                  minItems: 1
+                message:
+                  type: string
+                  maxLength: 255
+              required:
+              - tagId
+              - files
+      responses:
+        '200':
+          description: Created or updated file tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      tagId:
+                        type: string
+                      message:
+                        type:
+                        - string
+                        - 'null'
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+                    required:
+                    - id
+                    - tagId
+                    - message
+                    - createdAt
+                    - updatedAt
+                required:
+                - tag
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/upsert-tag
+  /v2/project/assets:
+    post:
+      operationId: uploadAssets
+      summary: Upload Project assets
+      description: Upload OpenType or TrueType fonts for Lottie translations across your Organization. Uploading the same font family, weight, and italic style replaces the existing font. You can safely retry the full upload after a `500` response.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      assetType:
+                        type: string
+                        enum:
+                        - FONT
+                      content:
+                        type: string
+                        minLength: 1
+                      fileName:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        pattern: \.([tT][tT][fF]|[oO][tT][fF])$
+                      family:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                      style:
+                        type: string
+                        minLength: 1
+                        maxLength: 100
+                    required:
+                    - assetType
+                    - content
+                    - fileName
+                  minItems: 1
+                  maxItems: 50
+              required:
+              - assets
+      responses:
+        '201':
+          description: Uploaded assets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        assetKey:
+                          type: string
+                        fileName:
+                          type: string
+                      required:
+                      - id
+                      - assetKey
+                      - fileName
+                  count:
+                    type: integer
+                    minimum: 0
+                required:
+                - assets
+                - count
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/upload-assets
+  /v2/projects/{projectId}/api-keys:
+    post:
+      operationId: createProjectApiKey
+      summary: Create a Project API Key
+      description: Create a project API key. Requires `project:api_keys:write`; project keys cannot create other keys. If you cannot grant a selected permission, the request returns `403` without creating a key. Each successful request creates a new key. Store the returned secret securely.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+        required: true
+        name: projectId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: Key name, 1–255 characters after trimming.
+                permissions:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProjectApiKeyPermission'
+                  minItems: 1
+                  description: Project permissions to grant. Select at least one, or omit to grant all project permissions you can delegate. You must hold every selected permission. Duplicates are ignored. Write permissions do not include Read.
+                type:
+                  type: string
+                  enum:
+                  - production
+                  - development
+                  deprecated: true
+                  description: Ignored. All new keys are project-scoped API keys for any environment.
+              required:
+              - name
+              additionalProperties: false
+      responses:
+        '201':
+          description: Project API key created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apiKey:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      key:
+                        type: string
+                      projectId:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - production
+                        deprecated: true
+                        description: Compatibility field. All project API keys work in any environment.
+                    required:
+                    - id
+                    - name
+                    - key
+                    - projectId
+                    - type
+                required:
+                - apiKey
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/create-api-key
+  /v2/projects:
+    get:
+      operationId: listProjects
+      summary: List Projects
+      description: List projects you are a member of, or the projects your API key is bound to, ordered by ID. No permission or `gt-project-id` header is needed. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of Projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        orgId:
+                          type: string
+                        orgName:
+                          type: string
+                      required:
+                      - id
+                      - name
+                      - orgId
+                      - orgName
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/list-projects
+  /v2/orgs:
+    get:
+      operationId: listOrgs
+      summary: List Organizations
+      description: List Organizations you can access, ordered by ID. Organization and Project keys each return only their own Organization; user tokens return every Organization the user belongs to. No project ID, permission, or token scope is required. Omit `cursor` for the first page. When the response's `nextCursor` is a string, pass it as `cursor` to fetch the next page; when it is `null`, there are no more results.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          description: The nextCursor from the previous page. Omit for the first page.
+        required: false
+        description: The nextCursor from the previous page. Omit for the first page.
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Maximum number of items to return, 1–100. Defaults to 50.
+        required: false
+        description: Maximum number of items to return, 1–100. Defaults to 50.
+        name: limit
+        in: query
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      responses:
+        '200':
+          description: Page of Organizations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - id
+                      - name
+                  nextCursor:
+                    type:
+                    - string
+                    - 'null'
+                    description: Opaque cursor for the next page; `null` when there are no more items. Pages are read independently, so items changed between requests may be missed or repeated.
+                required:
+                - items
+                - nextCursor
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/list-orgs
+  /v2/orgs/{orgId}/projects:
+    post:
+      operationId: createProject
+      summary: Create a Project
+      description: Create a project in the specified Organization. Requires `org:projects:create`. Returns `409` if your plan's project limit has been reached. Each successful request creates a new project.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+        required: true
+        name: orgId
+        in: path
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Trimmed Project name, 1–64 characters. Accepts ASCII letters, digits, spaces, dashes, underscores, apostrophes, parentheses, and periods.
+                defaultLocale:
+                  type: string
+                  description: Source locale for the project.
+                cdnEnabled:
+                  type: boolean
+                  description: Enable CDN delivery. Defaults to false when omitted.
+              required:
+              - name
+              - defaultLocale
+              additionalProperties: false
+      responses:
+        '201':
+          description: Project created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      orgId:
+                        type: string
+                      defaultLocale:
+                        type: string
+                    required:
+                    - id
+                    - name
+                    - orgId
+                    - defaultLocale
+                required:
+                - project
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '409':
+          description: The request conflicts with existing data or the current state of the project or organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Project
+      x-docs-slug: project/create-project
 components:
-  parameters:
-    GtApiVersion:
-      name: gt-api-version
-      in: header
-      required: false
-      description: 'API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.
-
-        '
-      schema:
-        type: string
-        enum:
-        - 2025-01-01.v0
-        - 2025-11-03.v1
-        - 2026-02-18.v1
-        - 2026-03-06.v1
-    GtProjectId:
-      name: gt-project-id
-      in: header
-      required: false
-      description: Target project ID. Required when authenticating with an organization API key.
-      schema:
-        type: string
-  responses:
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    ErrorResponse:
       type: object
       properties:
         error:
           type: string
-          description: Human-readable error message.
+      required:
+      - error
+    ApiVersion:
+      type: string
+      enum:
+      - 2025-01-01.v0
+      - 2025-11-03.v1
+      - 2026-02-18.v1
+      - 2026-03-06.v1
+      description: API contract version. Defaults to the oldest supported version.
+    ProjectApiKeyPermission:
+      type: string
+      enum:
+      - project:write
+      - project:context:read
+      - project:context:write
+      - project:files:read
+      - project:files:write
+      - project:translations:generate
+      - project:translations:enqueue
+    Branch:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
   securitySchemes:
-    Bearer:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: 'API key sent as a bearer token in the standard `Authorization: Bearer <key>` header. Use a project key (`gtx-api-`, `gtx-dev-`) or an organization key (`gtx-org-`). Organization keys must also send `gt-project-id` on project-scoped routes.
-
-        '
+      description: Project or organization API key.
+x-docs-nav:
+- group: files
+  title: Files
+  pages:
+  - files/upload-source
+  - files/upload-translations
+  - files/submit-diffs
+  - files/download-many
+  - files/download
+  - files/publish-files
+  - files/file-info
+  - files/translation-status
+  - files/move-files
+  - files/orphaned-files
+- group: context
+  title: Context
+  pages:
+  - context/generate-context
+- group: context-management
+  title: Context Management
+  pages:
+  - context-management/list-groups
+  - context-management/create-group
+  - context-management/get-group
+  - context-management/update-group
+  - context-management/delete-group
+  - context-management/list-project-groups
+  - context-management/get-project-group
+  - context-management/assign-group
+  - context-management/unassign-group
+  - context-management/reorder-group
+  - context-management/list-glossary
+  - context-management/upsert-glossary
+  - context-management/get-glossary-entry
+  - context-management/update-glossary-entry
+  - context-management/delete-glossary-entry
+  - context-management/list-glossary-translations
+  - context-management/set-glossary-translation
+  - context-management/delete-glossary-translation
+  - context-management/list-custom-prompts
+  - context-management/upsert-custom-prompts
+  - context-management/update-custom-prompt
+  - context-management/delete-custom-prompt
+  - context-management/import-content
+  - context-management/export-content
+- group: translation
+  title: Translation
+  pages:
+  - translation/translate-runtime
+  - translation/queue
+  - translation/job-status
+- group: project
+  title: Project
+  pages:
+  - project/list-projects
+  - project/list-orgs
+  - project/create-project
+  - project/create-api-key
+  - project/project-info
+  - project/update-project
+  - project/upload-assets
+  - project/branch-info
+  - project/create-branch
+  - project/upsert-tag

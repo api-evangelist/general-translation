@@ -1,15 +1,13 @@
 {
   "provider": "general-translation",
   "sources": [
-    "_original/general-translation-openapi-original.yml"
+    "_original/general-translation-openapi.json"
   ],
   "outputs": [
-    "general-translation-branches-api-openapi.yml",
     "general-translation-context-api-openapi.yml",
+    "general-translation-context-management-api-openapi.yml",
     "general-translation-files-api-openapi.yml",
-    "general-translation-jobs-api-openapi.yml",
     "general-translation-project-api-openapi.yml",
-    "general-translation-tags-api-openapi.yml",
     "general-translation-translation-api-openapi.yml"
   ],
   "archived": [],
@@ -17,16 +15,8 @@
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "general-translation-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "general-translation-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+1 apis, 5 total)"
   ],
-  "skipped": [
-    "general-translation-branches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "general-translation-context-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "general-translation-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "general-translation-jobs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "general-translation-project-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "general-translation-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "general-translation-translation-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

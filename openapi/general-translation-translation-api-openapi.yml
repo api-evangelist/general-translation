@@ -2,61 +2,281 @@ openapi: 3.2.0
 info:
   title: General Translation API
   version: 2026-03-06.v1
-  description: The public General Translation API.
+  description: 'Translate content and manage projects with the General Translation API at `https://api.gtx.dev`.
+
+
+    Authenticate with `Authorization: Bearer `. Each endpoint lists its required permissions. Project keys (`gtx-api-`) access one project; Organization keys (`gtx-org-`) access projects in one Organization.
+
+
+    For project-scoped requests, use the project ID in the path. If you also send `gt-project-id`, it must match. Without a project ID in the path, project keys use their own project; Organization keys require `gt-project-id`. Discovery endpoints need no project ID. Organization-scoped requests use the Organization ID in the path. You must have access to the selected project or Organization.'
   contact:
     name: General Translation Support
     email: support@generaltranslation.com
     url: https://generaltranslation.com
 servers:
-- url: https://api2.gtx.dev
-  description: Project and file API
-- url: https://runtime2.gtx.dev
-  description: Runtime translation API (POST /v2/translate)
-security:
-- Bearer: []
+- url: https://api.gtx.dev
+  description: General Translation API
 tags:
 - name: Translation
-  description: Translate content at runtime and queue files for translation.
+  description: Translate content, queue files for translation, and read translation job status.
 paths:
-  /v2/project/translations/enqueue:
+  /v2/project/jobs/info:
     post:
-      tags:
-      - Translation
-      summary: Queue files for translation
-      description: Enqueue uploaded source files for background translation. Max 100 files per request. The response shape depends on the requested `gt-api-version`.
-      operationId: enqueueTranslations
+      operationId: getTranslationJobInfo
+      summary: Get translation job status
+      description: Get the status of one or more translation or context generation jobs.
+      security:
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              properties:
+                jobIds:
+                  type: array
+                  items:
+                    type: string
+                    minLength: 1
+                  minItems: 1
               required:
-              - files
+              - jobIds
+      responses:
+        '200':
+          description: Translation job statuses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - queued
+                      jobId:
+                        type: string
+                    required:
+                    - status
+                    - jobId
+                  - type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - processing
+                      jobId:
+                        type: string
+                    required:
+                    - status
+                    - jobId
+                  - type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - failed
+                      jobId:
+                        type: string
+                      error:
+                        type: object
+                        properties:
+                          message:
+                            type:
+                            - string
+                            - 'null'
+                        required:
+                        - message
+                    required:
+                    - status
+                    - jobId
+                    - error
+                  - type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - completed
+                      jobId:
+                        type: string
+                    required:
+                    - status
+                    - jobId
+                  - type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - unknown
+                      jobId:
+                        type: string
+                    required:
+                    - status
+                    - jobId
+        '400':
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '403':
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '429':
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Translation
+      x-docs-slug: translation/job-status
+  /v2/project/translations/enqueue:
+    post:
+      operationId: enqueueFileTranslations
+      summary: Queue files for translation
+      description: Enqueue uploaded source files for background translation. Max 100 files per request. The response shape depends on the requested `gt-api-version`.
+      security:
+      - BearerAuth: []
+      parameters:
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
               properties:
                 files:
                   type: array
-                  minItems: 1
-                  maxItems: 100
                   items:
                     type: object
-                    required:
-                    - fileId
-                    - versionId
                     properties:
                       branchId:
                         type: string
+                        minLength: 1
                       fileId:
                         type: string
+                        minLength: 1
                       versionId:
                         type: string
+                        minLength: 1
                       fileName:
                         type: string
                       transformFormat:
                         type: string
+                        enum:
+                        - GTJSON
+                        - MDX
+                        - JSON
+                        - YAML
+                        - MD
+                        - TS
+                        - JS
+                        - HTML
+                        - TXT
+                        - PO
+                        - POT
+                        - TWILIO_CONTENT_JSON
+                        - LOTTIE
+                        - SVG
+                        - XCSTRINGS
+                        - DOT_STRINGS
+                        - DOT_STRINGSDICT
+                        - ANDROID_STRINGS
+                        - SRT
+                        - RESX
+                    required:
+                    - fileId
+                    - versionId
+                  minItems: 1
+                  maxItems: 100
                 targetLocales:
                   type: array
                   items:
@@ -67,255 +287,614 @@ paths:
                   type: boolean
                   default: false
                 modelProvider:
-                  type: string
-                  enum:
-                  - ANTHROPIC
-                  - OPENAI
-                  - XAI
-                  - GOOGLE
-                  description: AI model provider override.
+                  $ref: '#/components/schemas/ModelProvider'
                 publish:
                   type: boolean
-                  description: Publish translations once complete.
+              required:
+              - files
       responses:
         '200':
-          description: Files queued.
+          description: Enqueued translations. Shape depends on gt-api-version (legacy before 2025-11-03.v1).
           content:
             application/json:
               schema:
-                type: object
-                description: 'On `gt-api-version` >= 2025-11-03.v1 returns `jobData`; earlier versions return inline `translations` and `data`.
-
-                  '
-                properties:
-                  jobData:
-                    type: object
-                    additionalProperties: true
-                    description: Map of jobId to job details.
-                  locales:
-                    type: array
-                    items:
+                anyOf:
+                - type: object
+                  properties:
+                    jobData:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          kind:
+                            type: string
+                            enum:
+                            - file_translation
+                          sourceFileId:
+                            type: string
+                          fileId:
+                            type: string
+                          versionId:
+                            type: string
+                          branchId:
+                            type: string
+                          targetLocale:
+                            type: string
+                          projectId:
+                            type: string
+                          orgId:
+                            type: string
+                          force:
+                            type: boolean
+                          outputFileFormat:
+                            $ref: '#/components/schemas/FileFormat'
+                          modelProvider:
+                            $ref: '#/components/schemas/ModelProvider'
+                          glossaryRetranslate:
+                            type: boolean
+                          changedGlossaryTerms:
+                            type: array
+                            items:
+                              type: string
+                          onComplete:
+                            type: object
+                            properties:
+                              kind:
+                                type: string
+                                enum:
+                                - google_drive_apply
+                              userId:
+                                type: string
+                            required:
+                            - kind
+                        required:
+                        - sourceFileId
+                        - fileId
+                        - versionId
+                        - branchId
+                        - targetLocale
+                        - projectId
+                        - orgId
+                        - force
+                    locales:
+                      type: array
+                      items:
+                        type: string
+                    message:
                       type: string
-                  message:
-                    type: string
+                  required:
+                  - jobData
+                  - locales
+                  - message
+                - type: object
+                  properties:
+                    translations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          locale:
+                            type: string
+                          metadata: {}
+                          fileId:
+                            type: string
+                          fileName:
+                            type: string
+                          versionId:
+                            type: string
+                          branchId:
+                            type: string
+                          id:
+                            type: string
+                          isReady:
+                            type: boolean
+                          downloadUrl:
+                            type: string
+                        required:
+                        - locale
+                        - fileId
+                        - fileName
+                        - versionId
+                        - branchId
+                        - id
+                        - isReady
+                        - downloadUrl
+                    data:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          fileName:
+                            type: string
+                          versionId:
+                            type: string
+                        required:
+                        - fileName
+                        - versionId
+                    locales:
+                      type: array
+                      items:
+                        type: string
+                    message:
+                      type: string
+                  required:
+                  - translations
+                  - data
+                  - locales
+                  - message
         '400':
-          description: Bad request, including missing source files.
+          description: Invalid request or missing source files
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                  missing:
-                    type: array
-                    items:
+                anyOf:
+                - $ref: '#/components/schemas/ErrorResponse'
+                - type: object
+                  properties:
+                    error:
                       type: string
-                  count:
-                    type: integer
+                    missing:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          fileId:
+                            type: string
+                          versionId:
+                            type: string
+                        required:
+                        - fileId
+                        - versionId
+                    count:
+                      type: number
+                  required:
+                  - error
+                  - missing
+                  - count
+            text/html:
+              schema:
+                type: string
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '402':
+          description: The organization's billing account is blocked, or its plan usage limit, monthly spend limit, or credit balance does not cover this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '429':
-          $ref: '#/components/responses/RateLimited'
-  /v2/translate:
-    servers:
-    - url: https://runtime2.gtx.dev
-      description: Runtime translation API
-    post:
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
       tags:
       - Translation
-      summary: Translate content at runtime
-      description: Translate one or more strings or structured content entries with caching and memoization. Authentication is optional; unauthenticated requests may receive partial results.
+      x-docs-slug: translation/queue
+  /v2/translate:
+    post:
       operationId: translate
+      summary: Translate content at runtime
+      description: Translate strings, structured content, or Markdown and MDX documents. Send documents as strings with `fileFormat` set to `MD` or `MDX`. Requires `project:translations:generate`. Existing development API keys are also accepted.
       security:
-      - Bearer: []
-      - {}
+      - BearerAuth: []
       parameters:
-      - $ref: '#/components/parameters/GtApiVersion'
-      - $ref: '#/components/parameters/GtProjectId'
+      - schema:
+          $ref: '#/components/schemas/ApiVersion'
+        required: false
+        description: API contract version. Defaults to the oldest supported version.
+        name: gt-api-version
+        in: header
+      - schema:
+          type: string
+          description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        required: false
+        description: Target project ID when no project ID is present in the path. Project API keys default to their bound project. If supplied, the header must match both the path target and the key’s bound project.
+        name: gt-project-id
+        in: header
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-              - requests
-              - targetLocale
-              - sourceLocale
-              - metadata
-              properties:
-                requests:
-                  type: object
-                  minProperties: 1
-                  description: Map of request key to a translation request entry.
-                  additionalProperties:
-                    type: object
-                    required:
-                    - source
-                    properties:
-                      source:
-                        description: String, JSX, ICU, or i18next content to translate.
-                      metadata:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          hash:
-                            type: string
-                          context:
-                            type: string
-                          maxChars:
-                            type: integer
-                          dataFormat:
-                            type: string
-                            enum:
-                            - STRING
-                            - JSX
-                            - ICU
-                            - I18NEXT
-                            default: STRING
-                          actionType:
-                            type: string
-                            default: fast
-                          sourceCode:
-                            type: object
-                            additionalProperties:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  before:
-                                    type: string
-                                    maxLength: 2000
-                                  target:
-                                    type: string
-                                    maxLength: 500
-                                  after:
-                                    type: string
-                                    maxLength: 2000
-                targetLocale:
-                  type: string
-                  minLength: 1
-                sourceLocale:
-                  type: string
-                  minLength: 1
-                metadata:
-                  type: object
-                  properties:
-                    modelProvider:
-                      type: string
-                      enum:
-                      - ANTHROPIC
-                      - OPENAI
-                      - XAI
-                      - GOOGLE
+              $ref: '#/components/schemas/RuntimeTranslationRequest'
       responses:
         '200':
-          description: Cached or partially completed translation results, keyed by request key.
+          description: All translations were served from cache
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
-                  type: object
-                  properties:
-                    success:
-                      type: boolean
-                    translation:
-                      type: string
-                    error:
-                      type: string
+                $ref: '#/components/schemas/RuntimeTranslationResponse'
         '201':
-          description: Translation results, keyed by request key.
+          description: Translations completed
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
-                  type: object
-                  properties:
-                    success:
-                      type: boolean
-                    translation:
-                      type: string
-                    error:
-                      type: string
+                $ref: '#/components/schemas/RuntimeTranslationResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          description: The request is malformed or failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '401':
+          description: Authentication is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          description: The organization's billing account is blocked, or its plan usage limit, monthly spend limit, or credit balance does not cover this request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '403':
-          $ref: '#/components/responses/Forbidden'
+          description: The caller is authenticated but not allowed to perform this operation or access the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: The requested resource was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '413':
+          description: The request, or the data it would return, exceeds a size or item limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '415':
+          description: The request body's Content-Type is missing or not supported. Send the body as application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
         '429':
-          $ref: '#/components/responses/RateLimited'
+          description: Too many requests. The rate limit was exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: An unexpected server error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/html:
+              schema:
+                type: string
+      tags:
+      - Translation
+      x-docs-slug: translation/translate-runtime
 components:
-  responses:
-    RateLimited:
-      description: Rate limit or quota exceeded.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: The API key lacks the required permission, or the action is not allowed on the current plan.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    PaymentRequired:
-      description: Payment or quota validation failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    GtApiVersion:
-      name: gt-api-version
-      in: header
-      required: false
-      description: 'API version. Defaults to the earliest supported version. Latest is `2026-03-06.v1`.
-
-        '
-      schema:
-        type: string
-        enum:
-        - 2025-01-01.v0
-        - 2025-11-03.v1
-        - 2026-02-18.v1
-        - 2026-03-06.v1
-    GtProjectId:
-      name: gt-project-id
-      in: header
-      required: false
-      description: Target project ID. Required when authenticating with an organization API key.
-      schema:
-        type: string
   schemas:
-    Error:
+    ApiVersion:
+      type: string
+      enum:
+      - 2025-01-01.v0
+      - 2025-11-03.v1
+      - 2026-02-18.v1
+      - 2026-03-06.v1
+      description: API contract version. Defaults to the oldest supported version.
+    ModelProvider:
+      type: string
+      enum:
+      - ANTHROPIC
+      - OPENAI
+      - XAI
+      - GOOGLE
+      - HYPERCLOVA
+    RuntimeFileFormat:
+      type: string
+      enum:
+      - MD
+      - MDX
+    ErrorResponse:
       type: object
       properties:
         error:
           type: string
-          description: Human-readable error message.
+      required:
+      - error
+    RuntimeTranslationResponse:
+      type: object
+      additionalProperties:
+        oneOf:
+        - type: object
+          properties:
+            success:
+              type: boolean
+              enum:
+              - true
+            translation:
+              $ref: '#/components/schemas/JsonValue'
+            dataFormat:
+              $ref: '#/components/schemas/DataFormat'
+            locale:
+              type: string
+          required:
+          - success
+          - dataFormat
+          - locale
+        - type: object
+          properties:
+            success:
+              type: boolean
+              enum:
+              - false
+            error:
+              type: string
+            code:
+              type: number
+          required:
+          - success
+          - error
+          - code
+    JsonValue:
+      anyOf:
+      - type: string
+      - type: number
+      - type: boolean
+      - type: 'null'
+      - type: array
+        items:
+          oneOf:
+          - $ref: '#/components/schemas/JsonValue'
+          - type: 'null'
+      - type: object
+        additionalProperties:
+          oneOf:
+          - $ref: '#/components/schemas/JsonValue'
+          - type: 'null'
+    FileFormat:
+      type: string
+      enum:
+      - GTJSON
+      - MDX
+      - JSON
+      - YAML
+      - MD
+      - TS
+      - JS
+      - HTML
+      - TXT
+      - PO
+      - POT
+      - TWILIO_CONTENT_JSON
+      - LOTTIE
+      - SVG
+      - XCSTRINGS
+      - DOT_STRINGS
+      - DOT_STRINGSDICT
+      - ANDROID_STRINGS
+      - SRT
+      - RESX
+    RuntimeTranslationRequest:
+      type: object
+      properties:
+        requests:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              source: {}
+              metadata:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  hash:
+                    type: string
+                  context:
+                    type: string
+                  maxChars:
+                    type: number
+                  dataFormat:
+                    $ref: '#/components/schemas/DataFormat'
+                  fileFormat:
+                    $ref: '#/components/schemas/RuntimeFileFormat'
+                  actionType:
+                    type: string
+                    enum:
+                    - fast
+                    - standard
+                    default: fast
+                  sourceCode:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          before:
+                            type: string
+                          target:
+                            type: string
+                          after:
+                            type: string
+                        required:
+                        - before
+                        - target
+                        - after
+                default:
+                  dataFormat: STRING
+                  actionType: fast
+        targetLocale:
+          type: string
+          minLength: 1
+        sourceLocale:
+          type: string
+          minLength: 1
+        metadata:
+          type: object
+          properties:
+            modelProvider:
+              $ref: '#/components/schemas/ModelProvider'
+      required:
+      - requests
+      - targetLocale
+      - sourceLocale
+      - metadata
+    DataFormat:
+      type: string
+      enum:
+      - JSX
+      - ICU
+      - I18NEXT
+      - STRING
   securitySchemes:
-    Bearer:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: 'API key sent as a bearer token in the standard `Authorization: Bearer <key>` header. Use a project key (`gtx-api-`, `gtx-dev-`) or an organization key (`gtx-org-`). Organization keys must also send `gt-project-id` on project-scoped routes.
-
-        '
+      description: Project or organization API key.
+x-docs-nav:
+- group: files
+  title: Files
+  pages:
+  - files/upload-source
+  - files/upload-translations
+  - files/submit-diffs
+  - files/download-many
+  - files/download
+  - files/publish-files
+  - files/file-info
+  - files/translation-status
+  - files/move-files
+  - files/orphaned-files
+- group: context
+  title: Context
+  pages:
+  - context/generate-context
+- group: context-management
+  title: Context Management
+  pages:
+  - context-management/list-groups
+  - context-management/create-group
+  - context-management/get-group
+  - context-management/update-group
+  - context-management/delete-group
+  - context-management/list-project-groups
+  - context-management/get-project-group
+  - context-management/assign-group
+  - context-management/unassign-group
+  - context-management/reorder-group
+  - context-management/list-glossary
+  - context-management/upsert-glossary
+  - context-management/get-glossary-entry
+  - context-management/update-glossary-entry
+  - context-management/delete-glossary-entry
+  - context-management/list-glossary-translations
+  - context-management/set-glossary-translation
+  - context-management/delete-glossary-translation
+  - context-management/list-custom-prompts
+  - context-management/upsert-custom-prompts
+  - context-management/update-custom-prompt
+  - context-management/delete-custom-prompt
+  - context-management/import-content
+  - context-management/export-content
+- group: translation
+  title: Translation
+  pages:
+  - translation/translate-runtime
+  - translation/queue
+  - translation/job-status
+- group: project
+  title: Project
+  pages:
+  - project/list-projects
+  - project/list-orgs
+  - project/create-project
+  - project/create-api-key
+  - project/project-info
+  - project/update-project
+  - project/upload-assets
+  - project/branch-info
+  - project/create-branch
+  - project/upsert-tag
