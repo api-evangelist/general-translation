@@ -104,6 +104,23 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-official-clis.py
   first_seen: '2026-10-20'
+- partner_name: Adobe Creative Cloud (own)
+  partner: adobe-creative-cloud
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://exchange.adobe.com/apps/cc/205962/locadex
+  mirror_of: adobe-creative-cloud/integrations/adobe-creative-cloud-integration-edges.yml
+  apps:
+  - Locadex
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Exchange Creative Cloud listing (After Effects)
 generated: '2026-10-18'
 method: searched
 source:
@@ -127,3 +144,4 @@ checked:
 - https://registry.npmjs.org
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
+- adobe-creative-cloud/integrations/adobe-creative-cloud-integration-edges.yml

@@ -79,3 +79,16 @@
     detected: '2026-10-18'
   status: not-a-workflow
   arazzo: null
+- slug: general-translation-adobe-creative-cloud-own
+  label: Adobe Creative Cloud (own)
+  partner: adobe-creative-cloud
+  partner_name: Adobe Creative Cloud (own)
+  category: Adobe Exchange Creative Cloud listing (After Effects)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/cc/205962/locadex
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
