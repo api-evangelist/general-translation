@@ -898,3 +898,9 @@ x-docs-nav:
   - project/branch-info
   - project/create-branch
   - project/upsert-tag
+x-provenance:
+  method: harvested
+  publisher: General Translation
+  source: https://generaltranslation.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
