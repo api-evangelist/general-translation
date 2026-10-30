@@ -64,6 +64,159 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-General Translation is a company surfaced as a portfolio company of a16z and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+General Translation is an end-to-end internationalization (i18n) and localization platform for developers, backed by a16z. It combines open-source i18n libraries for React, Next.js, React Native, Node.js, and Python with an AI-powered translation API, a context platform (glossaries and translation instructions), and Locadex, an AI coding agent that internationalizes source code and opens pull requests. The public REST API (api2.gtx.dev, plus the runtime host runtime2.gtx.dev) uploads source files, queues and downloads translations, manages branches and tags, reads project and job status, and translates content at runtime. It is used by developer-first teams including Cursor, Windsurf, Ramp, Mintlify, and ClickHouse.
 
-Backed by: a16z
+**Areas:** Company · Internationalization · Localization · Translation · Developer Tools · Artificial Intelligence · i18n · SDK · Machine Translation
+
+## General Translation on APIs.io
+
+Everything profiled for General Translation is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/general-translation/](https://apis.io/providers/general-translation/)** — or go straight to one of the APIs or properties below.
+
+### APIs (7)
+
+- [General Translation Branches API](https://apis.io/apis/general-translation/general-translation-branches-api/) — Read and create project branches.
+- [General Translation Context API](https://apis.io/apis/general-translation/general-translation-context-api/) — Generate translation context such as glossaries and instructions.
+- [General Translation Files API](https://apis.io/apis/general-translation/general-translation-files-api/) — Upload, download, publish, move, and inspect project files.
+- [General Translation Jobs API](https://apis.io/apis/general-translation/general-translation-jobs-api/) — Read background job status.
+- [General Translation Project API](https://apis.io/apis/general-translation/general-translation-project-api/) — Read and update project information.
+- [General Translation Tags API](https://apis.io/apis/general-translation/general-translation-tags-api/) — Tag file versions.
+- [General Translation API](https://apis.io/apis/general-translation/general-translation-translation-api/) — Translate content at runtime and queue files for translation.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [General Translation Webhooks](https://apis.io/asyncapis/general-translation/general-translation-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [general-translation](https://apis.io/servers/general-translation/general-translation/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [General Translation Agentic Access](https://apis.io/agentic-access/general-translation/general-translation-agentic-access/)
+
+#### Collections (14)
+
+Postman and Open Collection request collections.
+
+- [General Translation Branches API](https://apis.io/collections/general-translation/open-general-translation-branches-api/)
+- [General Translation Branches Context API](https://apis.io/collections/general-translation/open-general-translation-context-api/)
+- [General Translation Branches Files API](https://apis.io/collections/general-translation/open-general-translation-files-api/)
+- [General Translation Branches Jobs API](https://apis.io/collections/general-translation/open-general-translation-jobs-api/)
+- [General Translation Branches Project API](https://apis.io/collections/general-translation/open-general-translation-project-api/)
+- [General Translation Branches Tags API](https://apis.io/collections/general-translation/open-general-translation-tags-api/)
+- [General Branches Translation API](https://apis.io/collections/general-translation/open-general-translation-translation-api/)
+- [General Translation Branches API](https://apis.io/collections/general-translation/postman-general-translation-branches-api/)
+- [General Translation Branches Context API](https://apis.io/collections/general-translation/postman-general-translation-context-api/)
+- [General Translation Branches Files API](https://apis.io/collections/general-translation/postman-general-translation-files-api/)
+- [General Translation Branches Jobs API](https://apis.io/collections/general-translation/postman-general-translation-jobs-api/)
+- [General Translation Branches Project API](https://apis.io/collections/general-translation/postman-general-translation-project-api/)
+- [General Translation Branches Tags API](https://apis.io/collections/general-translation/postman-general-translation-tags-api/)
+- [General Branches Translation API](https://apis.io/collections/general-translation/postman-general-translation-translation-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [General Translation Openapi Overlay](https://apis.io/overlays/general-translation/general-translation-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [General Translation Authentication](https://apis.io/security/general-translation/general-translation-authentication/)
+- [General Translation Domain Security](https://apis.io/security/general-translation/general-translation-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [General Translation Plans Pricing](https://apis.io/plans/general-translation/general-translation-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [General Translation Rate Limits](https://apis.io/rate-limits/general-translation/general-translation-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://generaltranslation.com)
+- [Documentation](https://generaltranslation.com/en-US/docs)
+- [Getting started](https://generaltranslation.com/en-US/docs/cli/quickstart)
+- [API reference](https://generaltranslation.com/en-US/docs/api)
+- [Pricing](https://generaltranslation.com/en-US/pricing)
+- [Sign up](https://generaltranslation.com/en-US/dashboard)
+- [Support](https://generaltranslation.com/discord)
+- [Blog](https://generaltranslation.com/en-US/blog)
+- [Compliance](https://generaltranslation.com/en-US/pricing)
+- [Terms of service](https://generaltranslation.com/en-US/legal/terms-of-service)
+- [Privacy policy](https://generaltranslation.com/en-US/legal/privacy-policy)
+- [GitHub](https://github.com/generaltranslation)
+- [Status](https://gt-status.com)
+
+## API Evangelist rating
+
+**Kin Score 69.5** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 59.5 |
+| Contract governance | 18.2 |
+| Operational transparency | 73.7 |
+| Developer ergonomics | 81.5 |
+| Access clarity | 73.7 |
+
+**Agent readiness 34.5** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 27.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/general-translation/](https://apis.io/providers/general-translation/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for General Translation: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/general-translation/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
